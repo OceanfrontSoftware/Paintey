@@ -1,0 +1,68 @@
+<html>
+ <head>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <style>
+    body {width: 100%;}
+    #container {width: 90%; margin: auto; word-wrap: break-word; border: 5px solid gold; }
+    span {font-family: Courier, Monaco, monospace; color: #ddd; }
+		span.painted {font-weight: bold; color: #444;}
+  </style>
+ </head>
+ <body>
+	<div id="container"></div>
+	<div id="controls">
+		<!--
+			asciifun.com - possibly
+			let people add watchers and painters. 
+			A watcher hangs out waiting for an event to happen, like left clicking on a letter while moving to the right.
+			When a watcher detects an event, it finds painters capable of handling the event and passes them the event information.
+
+			As a registered member you are able to create projects. You can clone an existing template or public project, or start your own. 
+			Once in a project you select events and tie them to painters using dropdowns. You can also add custom events and painters.
+			
+			Everythign is an event. For example, document ready is an event. I need to create document ready event and a painter. I need to 
+			build the system to build the system, as it were. 
+
+			All this informatino needs to be stored in a database. I can start with basic membership, cloned from ez-converter. 
+		-->
+		<table>
+			<tr>
+				<td>
+
+				</td>
+			</tr>
+		</table>
+	</div>
+  <script type="text/javascript">
+   (function($){
+		for(var i = 0; i < 8000; i++)
+		{
+			var span = $("<span/>").text("O");
+			$("#container").append(span);
+		}
+
+		var prevX, X, direction;
+		var mouseDown = false;
+		$("body").mousedown(function(){mouseDown = true;})
+		$("body").mouseup(function(){mouseDown = false;})
+		$("body").mousemove(function(event){
+			prevX= $(this).data('prevX');
+			
+			$(this).data('prevX', X);
+
+			});
+			
+			$("span").mousemove(function(event){
+				X = event.pageX;
+				if(prevX && mouseDown){
+					$(this).addClass('painted');
+					if(X > prevX)
+						$(this).text("/");
+					else
+						$(this).text("\\");
+				}	
+			});
+		})(jQuery)
+  </script>
+ </body>
+</html>
