@@ -12,7 +12,7 @@
 		user-select: none;
 	}
     #container {width: 900px; margin: auto; word-wrap: break-word; border: 5px solid gold; }
-    span {font-family: Courier, Monaco, monospace; color: #444; font-size: 12pt; }
+    span {font-family: Courier, Monaco, monospace; color: #444; font-size: 12pt; border:1px solid white; width:12pt; overflow: hidden; }
 	span.painted {font-weight: bold;  }
   </style>
  </head>
@@ -21,6 +21,12 @@
 	<div id="controls">
 		<label>Character</label>
 		<input type="text" id="char" value="O"/>
+		<label>Color</label>
+		<input type="text" id="color" value="black"/>
+		<label>Background Color</label>
+		<input type="text" id="bgcolor" value="white"/>
+		<label>Border</label>
+		<input type="text" id="border" value="1px solid white"/>
 	</div>
   	<script type="text/javascript">
    		(function($){
@@ -44,11 +50,18 @@
 						$(this).addClass('painted');
 						var char = $("#char").val();
 						$(this).text(char);
+						var color = $("#color").val();
+						$(this).css("color", color);
+						var bgcolor = $("#bgcolor").val();
+						$(this).css("background-color", bgcolor);
+						var border = $("#border").val();
+						$(this).css("border", border);
 					}
 						
 					if(event.which == 3){
 						$(this).removeClass('painted');
 						$(this).html("&nbsp;");
+						$(this).css("color", "black");
 					}
 						
 				}	
