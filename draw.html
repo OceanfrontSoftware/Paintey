@@ -1,66 +1,186 @@
 <!DOCTYPE html>
 <html>
-<body>
 
-<canvas id="myCanvas" width="800" height="600" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+<head>
+  
+  <style>
+    .canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 1px solid #ccc;
+    }
+    .control-menu
+    { 
+      position: absolute;
+      top: 620px;
+    }
+    .control .name {font-weight: bold;}
+    .name {display: inline-block; width: 150px;}
+    .option {display: inline-block;}
+  </style>
+</head>
+
+<canvas id="myCanvas" class="canvas" width="800" height="600">
+  Your browser does not support the HTML5 canvas tag.
+</canvas>
+<div class="control-menu">
+  <div class="control">
+    <span class="name">Fill Style</span>
+    <div class="option">
+      <input type="radio" name="fillStyle" value="fill" checked />
+      <span class="label">Fill</span>
+    </div>
+    <div class="option">
+      <input type="radio" name="fillStyle" value="stroke" />
+      <span class="label">Outline</span>
+  </div>
+  <div class="control">
+    <span class="name">Color</span>
+    <div class="option">
+      <input type="radio" name="color" value="random" checked/>
+      <span class="label">Random</span>
+    </div>
+    <div class="option">
+      <input type="radio" name="color" value="color" />
+      <span class="label">Color</span>
+      <input type="text" name="colorValue" value="#000"/>
+    </div>
+  </div>
+  <div class="control">
+    <span class="name">Size</span>
+    <div class="option"></div>
+    <input type="text" name="size" value="20"/>
+    </div>
+  </div>
+
+
+  <div class="control" style="display: none;">
+    <span class="name">Color</span>
+    <div class="option"></div>
+      <input type="radio" name="" value="" />
+      <span class="label"></span>
+    </div>
+  </div>
+
+  
+  <!-- jQuery -->
+  <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+  
+
+
 
 <script>
 
-// When true, moving the mouse draws on the canvas
-let isDrawing = false;
-let x = 0;
-let y = 0;
+  // When true, moving the mouse draws on the canvas
+  
+  var options = {
+    isDrawing: false,
+    fillStyle : "fill",
+    color: "random",
+    colorValue: "#000",
+    size: "20",
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 0,
+    context: null
+  };
 
-var myPics  = document.getElementById("myCanvas");
-var context = myPics .getContext("2d");
+  var myPics = document.getElementById("myCanvas");
+  options.context = myPics.getContext("2d");
+  bindEvents(myPics);
 
 
+  // tool menu
+  (function($){
+    $("input").change(changeOptions);
+    $("input").keyup(changeOptions);
+  })(jQuery);
 
-// Add the event listeners for mousedown, mousemove, and mouseup
-myPics.addEventListener('mousedown', e => {
-  x = e.offsetX;
-  y = e.offsetY;
-  isDrawing = true;
-});
-
-myPics.addEventListener('mousemove', e => {
-  if (isDrawing === true) {
-    draw(context, x, y, e.offsetX, e.offsetY);
-    x = e.offsetX;
-    y = e.offsetY;
+  function changeOptions(){
+    var input = $(this);
+    var value = input.val();
+    options[input.attr("name")] = value;
   }
-});
 
-window.addEventListener('mouseup', e => {
-  if (isDrawing === true) {
-    draw(context, x, y, e.offsetX, e.offsetY);
-    x = 0;
-    y = 0;
-    isDrawing = false;
+  function bindEvents(canvas){
+    canvas.addEventListener('mousedown', e => {
+      options.x = e.offsetX;
+      options.y = e.offsetY;
+      options.isDrawing = true;
+    });
+
+    canvas.addEventListener('mousemove', e => {
+      if (options.isDrawing === true) {
+        draw();
+        options.x = e.offsetX;
+        options.y = e.offsetY;
+      }
+    });
   }
-});
-
-function draw(context, x1, y1, x2, y2) {
 
   
-  //text(context, x1, y1);
-  //return;
-  context.fillStyle = "#" + Math.floor(Math.random()*16777215).toString(16);
-  context.beginPath();
-  context.arc(x1, y1, 20, 0, 2 * Math.PI);
-  context.fill();
-  //context.stroke();
 
-}
 
-function text(ctx, x, y){
-  ctx.font = "80px Arial";
-  ctx.strokeStyle = "#0000" + Math.floor(Math.random()*256).toString(16);  //"#" + Math.floor(Math.random()*16777215).toString(16);
-  ctx.strokeText("BLUE", x, y);
-}
 
-</script> 
+
+  window.addEventListener('mouseup', e => {
+    if (options.isDrawing === true) {
+      options.x2 = e.offsetX;
+      options.y2 = e.offsetY;
+      draw();
+      options.x = 0;
+      options.y = 0;
+      options.isDrawing = false;
+    }
+  });
+
+  function getSize(){
+    return parseInt(options.size);
+    return Math.ceil(options.y/4);
+  }
+
+  var colorIndex = 0;
+  function getColor(){
+    var rainbow = ["#FF0000", "#FF7F00", "#FFFF00", " #00FF00", "#0000FF", "#2E2B5F", "#8B00FF"];
+    var color = rainbow[colorIndex];
+    colorIndex += 1;
+    if(colorIndex == rainbow.length)
+      colorIndex = 0;
+    return color;
+
+
+    if(options.color == "random")
+      return "#" + Math.floor(Math.random() * 16777215).toString(16);
+    else
+      return options.colorValue;
+
+  }
+
+  function draw() {
+
+    //console.log(JSON.stringify(options, null, 2));
+    options.context[options.fillStyle + "Style"] = getColor();
+    options.context.beginPath();
+    var size = getSize();
+    options.context.arc(options.x, options.y, size, 0, 2 * Math.PI);
+    options.context[options.fillStyle]();
+    //context.stroke();
+
+  }
+
+  function text(ctx, x, y) {
+    ctx.font = "80px Arial";
+    ctx.strokeStyle = "#0000" + Math.floor(Math.random() * 256).toString(16);  //"#" + Math.floor(Math.random()*16777215).toString(16);
+    ctx.strokeText("BLUE", x, y);
+  }
+
+</script>
 
 </body>
+
 </html>
