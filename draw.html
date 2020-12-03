@@ -31,6 +31,7 @@
     <div class="option">
       <button id="undo">Undo</button>
       <button id="redo">Redo</button>
+      <button id="redraw">Redraw</button>
     </div>
   </div>
   <div class="control">
@@ -42,6 +43,7 @@
     <div class="option">
       <input type="radio" name="fillStyle" value="stroke" />
       <span class="label">Outline</span>
+    </div>
   </div>
   <div class="control">
     <span class="name">Color</span>
@@ -57,8 +59,8 @@
   </div>
   <div class="control">
     <span class="name">Size</span>
-    <div class="option"></div>
-    <input type="text" name="size" value="20"/>
+    <div class="option">
+      <input type="range" min="1" max="400" name="size" value="20"/>
     </div>
   </div>
 
@@ -68,8 +70,16 @@
     <div class="option"></div>
       <input type="radio" name="" value="" />
       <span class="label"></span>
-    </div>
   </div>
+
+  <ul>
+    <li>make size a slider</li>
+    <li>add a way to scale size from top, bottom, left, right, and corners</li>
+    <li>shrink over time</li>
+    <li>add line width</li>
+    <li>add different color pallets</li>
+  </ul>
+</div>
 
   
   <!-- jQuery -->
@@ -103,6 +113,7 @@
     $("input").keyup(changeOptions);
     $("#undo").click(undo);
     $("#redo").click(redo)
+    $("#redraw").click(redraw);
   })(jQuery);
 
   function changeOptions(){
@@ -122,6 +133,31 @@
     first.removeClass('hide');
   }
 
+  var redrawTimer = null;
+  function redraw(){
+    $("canvas").remove();
+    addNewCanvas();
+    currentContext = options.context;
+    redrawTimer = setInterval(redrawItem, 10);
+
+  }
+
+  var currentContext = null;
+  function redrawItem(){
+    
+    if(_history.length == 0)
+    {
+      clearInterval(redrawTimer);
+      redrawTimer = null;
+      return;
+    }
+
+    var item = _history.pop();
+    options = item;
+    options.context = currentContext;
+    console.log(JSON.stringify(options, null, 2));
+    draw();
+  }
 
   
 
@@ -129,8 +165,6 @@
   var canvasId = 0;
   function addNewCanvas(){
     
-    console.log('add new canvas: id = ' + canvasId);
-
     // remove events from other canvases
     $(".canvas").off('mousedown').off('mousemove');
 
@@ -148,7 +182,6 @@
   // bind events to a canvas
   function bindEvents(canvas){
     canvas.on('mousedown', e => {
-      console.log('canvas.mousedown');
       options.x = e.offsetX;
       options.y = e.offsetY;
       options.isDrawing = true;
@@ -156,7 +189,6 @@
 
     canvas.on('mousemove', e => {
       if (options.isDrawing === true) {
-        console.log('canvas.mousemove');
         draw();
         options.x = e.offsetX;
         options.y = e.offsetY;
@@ -168,7 +200,6 @@
 
   window.addEventListener('mouseup', e => {
     if (options.isDrawing === true) {
-      console.log('window.mouseup');
       options.x2 = e.offsetX;
       options.y2 = e.offsetY;
       draw();
@@ -200,14 +231,22 @@
 
   }
 
-
+  var _history = [];
   function draw() {
+    
+
     $("canvas.hide").remove();
     options.context[options.fillStyle + "Style"] = getColor();
     options.context.beginPath();
     var size = getSize();
     options.context.arc(options.x, options.y, size, 0, 2 * Math.PI);
+    options.context.lineWidth=1;
     options.context[options.fillStyle]();
+    if(redrawTimer == null){
+      console.log(JSON.stringify(options, null, 2));
+      _history.push(Object.assign({}, options));
+    }
+    
   }
 
 
