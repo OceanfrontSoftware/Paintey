@@ -161,14 +161,14 @@
 
   
 
-
+  // canvasId: the id of the canvas you're working on
   var canvasId = 0;
   function addNewCanvas(){
     
     // remove events from other canvases
     $(".canvas").off('mousedown').off('mousemove');
 
-    // add new canvas 
+    // create a new canvas and add to 
     var id = 'canvas-' + canvasId;
     var canvas = $('<canvas id="' + id + '" class="canvas" width="800" height="600" />');
     $("#canvas-container").append(canvas);
@@ -211,7 +211,12 @@
   });
 
   function getSize(){
-    return parseInt(options.size);
+
+    // top right
+    
+
+    // whatever size is selected
+    //return parseInt(options.size);
     return Math.ceil(options.y/4);
   }
 
@@ -233,13 +238,17 @@
 
   var _history = [];
   function draw() {
-    
-
+    // remove any undo layers
     $("canvas.hide").remove();
+
+    // set stroke color
     options.context[options.fillStyle + "Style"] = getColor();
     options.context.beginPath();
+
+    // get the size of the circle
     var size = getSize();
     options.context.arc(options.x, options.y, size, 0, 2 * Math.PI);
+
     options.context.lineWidth=1;
     options.context[options.fillStyle]();
     if(redrawTimer == null){
