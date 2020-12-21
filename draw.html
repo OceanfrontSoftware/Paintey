@@ -4,17 +4,27 @@
 <head>
  
   <style>
+    html, body, #canvas-container {
+      width: 100%;
+      height: 100%;
+    }
     .canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0px;
+      left:0px;
       border: 1px solid #ccc;
     }
     .hide {display: none;}
     .control-menu
     { 
       position: absolute;
-      top: 620px;
+      bottom: 0px;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #444;
+
     }
     .control .name {font-weight: bold;}
     .name {display: inline-block; width: 150px;}
@@ -102,18 +112,25 @@
     context: null
   };
 
+  var _width = "100%";
+  var _height = "100%";
+
+
 
   
 
 
   // tool menu
   (function($){
+    _width = $("body").width();
+    _height = $("body").height();
     addNewCanvas();
     $("input").change(changeOptions);
     $("input").keyup(changeOptions);
     $("#undo").click(undo);
     $("#redo").click(redo)
     $("#redraw").click(redraw);
+    
   })(jQuery);
 
   function changeOptions(){
@@ -170,7 +187,7 @@
 
     // create a new canvas and add to 
     var id = 'canvas-' + canvasId;
-    var canvas = $('<canvas id="' + id + '" class="canvas" width="800" height="600" />');
+    var canvas = $('<canvas id="' + id + '" class="canvas" width="' + _width + '" height="' + _height + '" />');
     $("#canvas-container").append(canvas);
     options.context =  canvas[0].getContext("2d"); //document.getElementById(id).getContext("2d");
     bindEvents(canvas);
@@ -185,6 +202,7 @@
       options.x = e.offsetX;
       options.y = e.offsetY;
       options.isDrawing = true;
+      $(".control-menu").hide();
     });
 
     canvas.on('mousemove', e => {
@@ -206,18 +224,28 @@
       options.x = 0;
       options.y = 0;
       options.isDrawing = false;
+      var _size = null;
+      $(".control-menu").show();
       addNewCanvas();
     }
   });
 
+  var _size = null;
   function getSize(){
 
-    // top right
-    
-
     // whatever size is selected
-    //return parseInt(options.size);
-    return Math.ceil(options.y/4);
+    return parseInt(options.size);
+
+    // gradually reduce size
+    if(_size == null)
+      _size = options.size;
+
+    _size = _size - 0.5;
+    return _size;
+
+
+    // based on y mouse
+    //return Math.ceil(options.y/4);
   }
 
   var colorIndex = 0;
@@ -229,11 +257,24 @@
       colorIndex = 0;
     return color;
     */
+    
     if(options.color == "random")
       return "#" + Math.floor(Math.random() * 16777215).toString(16);
     else
       return options.colorValue;
+  }
 
+  function getGradient(){
+    //var grd = ctx.createRadialGradient(75, 50, 5, 90, 60, 100);
+    try{
+      var grd = options.context.createRadialGradient(options.x, options.y, 1, options.x, options.y , options.size);
+      grd.addColorStop(0, "#" + Math.floor(Math.random() * 16777215).toString(16));
+      grd.addColorStop(1, "#" + Math.floor(Math.random() * 16777215).toString(16));
+      return grd;
+    } catch(ex){
+      return getColor();
+    }
+    
   }
 
   var _history = [];
@@ -241,12 +282,23 @@
     // remove any undo layers
     $("canvas.hide").remove();
 
-    // set stroke color
-    options.context[options.fillStyle + "Style"] = getColor();
+    
     options.context.beginPath();
 
     // get the size of the circle
     var size = getSize();
+
+    if(size < 1){
+      _size = null;
+      options.isDrawing = false;
+      $("window").trigger("mouseup");
+      return;
+    }
+      
+
+    // set stroke color
+    options.context[options.fillStyle + "Style"] = getGradient(); // = getColor();
+
     options.context.arc(options.x, options.y, size, 0, 2 * Math.PI);
 
     options.context.lineWidth=1;
