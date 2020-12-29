@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ 
+  <style>
+    html, body, #canvas-container {
+      width: 100%;
+      height: 100%;
+    }
+    .canvas {
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0px;
+      left:0px;
+      border: 1px solid #ccc;
+    }
+    .hide {display: none;}
+    .control-menu
+    { 
+      position: absolute;
+      bottom: 0px;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #444;
+
+    }
+    .control .name {font-weight: bold;}
+    .name {display: inline-block; width: 150px;}
+    .option {display: inline-block;}
+  </style>
+</head>
+
+<div id="canvas-container">
+</div>
+
+<div class="control-menu">
+  <div class="control">
+    <span class="history">History</span>
+    <div class="option">
+      <button id="undo">Undo</button>
+      <button id="redo">Redo</button>
+      <button id="redraw">Redraw</button>
+    </div>
+  </div>
+  <div class="control">
+    <span class="name">Fill Style</span>
+    <div class="option">
+      <input type="radio" name="fillStyle" value="fill" checked />
+      <span class="label">Fill</span>
+    </div>
+    <div class="option">
+      <input type="radio" name="fillStyle" value="stroke" />
+      <span class="label">Outline</span>
+    </div>
+  </div>
+  <div class="control">
+    <span class="name">Color</span>
+    <div class="option">
+      <input type="radio" name="color" value="random" checked/>
+      <span class="label">Random</span>
+    </div>
+    <div class="option">
+      <input type="radio" name="color" value="color" />
+      <span class="label">Color</span>
+      <input id="colorValue" type="color" name="colorValue" value="#000000"/>
+    </div>
+  </div>
+  <div class="control">
+    <span class="name">Size</span>
+    <div class="option">
+      <input type="range" min="1" max="400" name="size" value="20"/>
+    </div>
+  </div>
+
+
+  <div class="control" style="display: none;">
+    <span class="name">Color</span>
+    <div class="option"></div>
+      <input type="radio" name="" value="" />
+      <span class="label"></span>
+  </div>
+
+  <ul>
+    <li>make size a slider</li>
+    <li>add a way to scale size from top, bottom, left, right, and corners</li>
+    <li>shrink over time</li>
+    <li>add line width</li>
+    <li>add different color pallets</li>
+  </ul>
+</div>
+
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+
+  // When true, moving the mouse draws on the canvas
+  
+  var options = {
+    isDrawing: false,
+    fillStyle : "fill",
+    color: "random",
+    colorValue: "#000",
+    size: "20",
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 0,
+    context: null
+  };
+
+  var _width = "100%";
+  var _height = "100%";
+
+
+
+  
+
+
+  // tool menu
+  (function($){
+    _width = $("body").width();
+    _height = $("body").height();
+    addNewCanvas();
+    $("input").change(changeOptions);
+    $("input").keyup(changeOptions);
+    $("#undo").click(undo);
+    $("#redo").click(redo)
+    $("#redraw").click(redraw);
+    
+  })(jQuery);
+
+  function changeOptions(){
+    var input = $(this);
+    var value = input.val();
+    options[input.attr("name")] = value;
+  }
+
+  function undo(){
+    console.log('undo');
+    var last = $("canvas").not('.hide').eq(-2);
+    last.addClass('hide');
+  }
+
+  function redo(){
+    var first = $("canvas.hide:first");
+    first.removeClass('hide');
+  }
+
+  var redrawTimer = null;
+  function redraw(){
+    $("canvas").remove();
+    addNewCanvas();
+    currentContext = options.context;
+    redrawTimer = setInterval(redrawItem, 10);
+
+  }
+
+  var currentContext = null;
+  function redrawItem(){
+    
+    if(_history.length == 0)
+    {
+      clearInterval(redrawTimer);
+      redrawTimer = null;
+      return;
+    }
+
+    var item = _history.pop();
+    options = item;
+    options.context = currentContext;
+    console.log(JSON.stringify(options, null, 2));
+    draw();
+  }
+
+  
+
+  // canvasId: the id of the canvas you're working on
+  var canvasId = 0;
+  function addNewCanvas(){
+    
+    // remove events from other canvases
+    $(".canvas").off('mousedown').off('mousemove');
+
+    // create a new canvas and add to 
+    var id = 'canvas-' + canvasId;
+    var canvas = $('<canvas id="' + id + '" class="canvas" width="' + _width + '" height="' + _height + '" />');
+    $("#canvas-container").append(canvas);
+    options.context =  canvas[0].getContext("2d"); //document.getElementById(id).getContext("2d");
+    bindEvents(canvas);
+    canvasId++;
+    
+  }
+
+
+  // bind events to a canvas
+  function bindEvents(canvas){
+    canvas.on('mousedown', e => {
+      options.x = e.offsetX;
+      options.y = e.offsetY;
+      options.isDrawing = true;
+      $(".control-menu").hide();
+    });
+
+    canvas.on('mousemove', e => {
+      if (options.isDrawing === true) {
+        draw();
+        options.x = e.offsetX;
+        options.y = e.offsetY;
+      }
+    });
+  }
+
+  
+
+  window.addEventListener('mouseup', e => {
+    if (options.isDrawing === true) {
+      options.x2 = e.offsetX;
+      options.y2 = e.offsetY;
+      draw();
+      options.x = 0;
+      options.y = 0;
+      options.isDrawing = false;
+      var _size = null;
+      $(".control-menu").show();
+      addNewCanvas();
+    }
+  });
+
+  var _size = null;
+  function getSize(){
+
+    // whatever size is selected
+    return parseInt(options.size);
+
+    // gradually reduce size
+    if(_size == null)
+      _size = options.size;
+
+    _size = _size - 0.5;
+    return _size;
+
+
+    // based on y mouse
+    //return Math.ceil(options.y/4);
+  }
+
+  var colorIndex = 0;
+  function getColor(){
+    /*var rainbow = ["#FF0000", "#FF7F00", "#FFFF00", " #00FF00", "#0000FF", "#2E2B5F", "#8B00FF"];
+    var color = rainbow[colorIndex];
+    colorIndex += 1;
+    if(colorIndex == rainbow.length)
+      colorIndex = 0;
+    return color;
+    */
+    
+    if(options.color == "random")
+      return "#" + Math.floor(Math.random() * 16777215).toString(16);
+    else
+      return options.colorValue;
+  }
+
+  function getGradient(){
+    //var grd = ctx.createRadialGradient(75, 50, 5, 90, 60, 100);
+    try{
+      var grd = options.context.createRadialGradient(options.x, options.y, 1, options.x, options.y , options.size);
+      grd.addColorStop(0, "#" + Math.floor(Math.random() * 16777215).toString(16));
+      grd.addColorStop(1, "#" + Math.floor(Math.random() * 16777215).toString(16));
+      return grd;
+    } catch(ex){
+      return getColor();
+    }
+    
+  }
+
+  var _history = [];
+  function draw() {
+    // remove any undo layers
+    $("canvas.hide").remove();
+
+    
+    options.context.beginPath();
+
+    // get the size of the circle
+    var size = getSize();
+
+    if(size < 1){
+      _size = null;
+      options.isDrawing = false;
+      $("window").trigger("mouseup");
+      return;
+    }
+      
+
+    // set stroke color
+    options.context[options.fillStyle + "Style"] = getGradient(); // = getColor();
+
+    options.context.arc(options.x, options.y, size, 0, 2 * Math.PI);
+
+    options.context.lineWidth=1;
+    options.context[options.fillStyle]();
+    if(redrawTimer == null){
+      console.log(JSON.stringify(options, null, 2));
+      _history.push(Object.assign({}, options));
+    }
+    
+  }
+
+
+
+  function text(ctx, x, y) {
+    ctx.font = "80px Arial";
+    ctx.strokeStyle = "#0000" + Math.floor(Math.random() * 256).toString(16);  //"#" + Math.floor(Math.random()*16777215).toString(16);
+    ctx.strokeText("BLUE", x, y);
+  }
+
+</script>
+
+</body>
+
+</html>
