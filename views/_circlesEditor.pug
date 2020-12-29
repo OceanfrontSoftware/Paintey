@@ -1,0 +1,17 @@
+// match the id to the data-action attribute on the toolbar button that opens the modal, in this case 'circles' matches the circles button
+#circles.modal.hide
+    .banner
+        button.closeButton
+            i.fa.fa-times
+    form
+        h3 Circles Plugin
+        .property-editor
+            .control
+                input(type='checkbox', name='filled') 
+                | Fill in circle
+            .control
+                | Thickness 
+                input(type='range', name='thickness', min='1', max='5')
+
+
+        
