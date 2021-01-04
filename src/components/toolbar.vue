@@ -1,7 +1,7 @@
 <template>
     <div id="toolbar" class="testimonial-group">
         <div class="row text-center">
-            <div v-for="tool in tools" class="col-3" :key="tool.name">
+            <div v-for="tool in tools" class="setting col-lg-1 col-3" :key="tool.name">
                 <span class="dot"></span>
                 <br/>
                 {{tool.name}}
@@ -63,7 +63,7 @@ export default {
   overflow-x: auto;
   white-space: nowrap;
 }
-.testimonial-group > .row > .col-3 {
+.testimonial-group > .row > .setting {
   display: inline-block;
 }
 
