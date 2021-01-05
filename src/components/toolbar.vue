@@ -1,34 +1,37 @@
 <template>
     <div id="toolbar" class="testimonial-group">
         <div class="row text-center">
-            <div v-for="tool in tools" class="setting col-lg-1 col-3" :key="tool.name">
-                <span class="dot"></span>
-                <br/>
-                {{tool.name}}
+            <div v-for="tool in tools" class="setting col-3" :key="tool.name">
+                <h3>{{tool.name}}</h3>
+                <div v-for="control in tool.controls" :key="control.title">
+                  <component v-bind:componentData="control" v-bind:is="control.component" />
+                </div>
             </div>
         </div>
+        <numberRange></numberRange>
     </div>
+    
 </template>
 
 <script>
+import numberRange from '../tools/numberRange.vue'
 export default {
+  name: 'App',
+  components: {
+    numberRange
+  },
     data() {
       return {
         tools: [
             {
-                name: "Size"
-            },
-            {
-                name: "Line Width"
-            },
-            {
-                name: "Fill Style"
-            },
-            {
-                name: "Color"
-            },
-            {
-                name: "Another"
+                name: "Size",
+                controls: [
+                  {
+                    component: "numberRange", 
+                    title: "Size", 
+                    description: "The size of the circle"
+                  }
+                ]
             }
         ]
       }
