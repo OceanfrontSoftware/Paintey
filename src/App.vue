@@ -3,11 +3,13 @@
     <Canvas />
     <Navigation />
     <Toolbar />
+    <Circles/>
   </div>
 </template>
 
 <script>
 import Canvas from './components/canvas.vue'
+import Circles from './plugins/circles.vue'
 import Navigation from './components/navigation.vue'
 import Toolbar from './components/toolbar.vue'
 
@@ -15,8 +17,9 @@ import Toolbar from './components/toolbar.vue'
 export default {
   name: 'App',
   components: {
-    Navigation,
+    Circles,
     Canvas,
+    Navigation,
     Toolbar
   }
 }

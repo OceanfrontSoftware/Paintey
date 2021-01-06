@@ -1,14 +1,14 @@
 <template>
-    <div id="toolbar" class="testimonial-group">
+    <div id="toolbar" class="toolbar">
+      <h2>{{this.$store.state.test}}</h2>
         <div class="row text-center">
-            <div v-for="tool in tools" class="setting col-3" :key="tool.name">
+            <div v-for="tool in this.$store.state.tools" class="setting col-1" :key="tool.name">
                 <h3>{{tool.name}}</h3>
                 <div v-for="control in tool.controls" :key="control.title">
                   <component v-bind:componentData="control" v-bind:is="control.component" />
                 </div>
             </div>
         </div>
-        <numberRange></numberRange>
     </div>
     
 </template>
@@ -16,32 +16,19 @@
 <script>
 import numberRange from '../tools/numberRange.vue'
 export default {
-  name: 'App',
+  name: 'Toolbar',
+  data(){
+    return {
+      tools: []
+    }
+  },
   components: {
     numberRange
   },
-    data() {
-      return {
-        tools: [
-            {
-                name: "Size",
-                controls: [
-                  {
-                    component: "numberRange", 
-                    title: "Size", 
-                    description: "The size of the circle"
-                  }
-                ]
-            }
-        ]
-      }
-    },
-    methods: {
-      showAlert() {
-        this.dismissCountDown = this.dismissSecs
-      }
-    }
+  updated() {
+    this.$root.$emit('LayoutChanged');
   }
+}
 </script>
 
 <style scoped>
@@ -61,12 +48,12 @@ export default {
     padding-top: 5px;
 }
 /* The heart of the matter */
-.testimonial-group > .row {
+.toolbar > .row {
   display: block;
   overflow-x: auto;
   white-space: nowrap;
 }
-.testimonial-group > .row > .setting {
+.toolbar > .row > .setting {
   display: inline-block;
 }
 

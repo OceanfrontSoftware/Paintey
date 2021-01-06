@@ -5,17 +5,8 @@
 
 <script>
 export default {
-    data() {
-        return {
-            height: 5,
-            width: 5,
-            top: 0,
-            margin: 0,
-        };
-    },
-    mounted(){
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
+    beforeDestroy() {
+        window.removeEventListener('resize', this.handleResize);
     },
     computed: {
         canvas: function () {
@@ -25,6 +16,15 @@ export default {
             return this.canvas.getContext('2d');
         }
     },
+    data() {
+        return {
+            height: 5,
+            width: 5,
+            top: 0,
+            margin: 0,
+        };
+    },
+  
     methods: {
         handleResize: function () {
             // Calculate new canvas size based on window
@@ -33,23 +33,18 @@ export default {
             this.height = window.innerHeight - this.margin - navHeight - toolbarHeight;
             this.width = window.innerWidth - this.margin;
             this.top = navHeight;
-            this.$nextTick(() => {
-                this.drawText();
-            })
         },
-        drawText: function () {
-            // Redraw & reposition content
-            var resizeText = 'Canvas width: ' + this.canvas.width + 'px';
-
-            
-            this.ctx.textAlign = 'center';
-            this.ctx.fillStyle = '#fff';
-            this.ctx.fillText(resizeText, 200, 200);
-        }
     },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.handleResize);
+
+    mounted(){
+        window.addEventListener('resize', this.handleResize);
+        this.$root.$on('LayoutChanged', this.handleResize);
+        this.handleResize();
+        this.$nextTick(() => {
+            this.$root.$emit('CanvasReady', this.canvas, this.ctx);
+        })
     }
+    
 };
 
 </script>
@@ -58,7 +53,6 @@ export default {
 #image-canvas {
     position: absolute;
     top: 56px;
-    background-color:#ccc;
     
 }
 </style>
