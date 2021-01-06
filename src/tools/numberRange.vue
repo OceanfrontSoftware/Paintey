@@ -1,6 +1,7 @@
 <template>
     <div class='tool'>
-        <input type="range" value="5" min="1" max="20"/>
+        <input ref="range" type="range" :value="componentData.value" :min="componentData.min" :max="componentData.max"/>
+        <span>{{componentData.value}}</span>
         <p>{{componentData.description}}</p>
         
     </div>
@@ -8,7 +9,14 @@
 
 <script>
 export default {
+    mounted(){
+        this.$refs.range.addEventListener('change', ()=>{
+            var value = this.$refs.range.value;
+            this.$root.$emit('SettingChanged', value, this.componentData.id);
+        });
+    },
     props: ['componentData']
+
 }
 </script>
 

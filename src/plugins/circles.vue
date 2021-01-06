@@ -5,6 +5,11 @@
 
 export default {
     // store data for the toolbar here
+    computed:{
+        size(){
+            return this.getControlValue('size-range');
+        }
+    },
     data() {
         return {
             canvas: null,
@@ -14,7 +19,7 @@ export default {
                 fillStyle : "fill",
                 color: "random",
                 colorValue: "#000",
-                size: 20,
+                size: this.size,
                 x: 0,
                 y: 0,
                 x2: 0,
@@ -26,11 +31,13 @@ export default {
                     name: "Size",
                     controls: [
                         {
+                            id: 'size-range',
                             component: "numberRange", 
                             title: "Size", 
                             description: "The size of the circle",
                             min: 1,
-                            max: 20
+                            max: 200,
+                            value: 20
                         }
                     ]
                 }
@@ -38,25 +45,56 @@ export default {
         }
     },
     methods: {
-        handleClick(){
-            console.log('clicked');
+        canvasReady(canvas, ctx){
+            this.canvas = canvas;
+            this.ctx = ctx;
+            this.canvas.addEventListener('mousedown', this.mouseDown);
+            this.canvas.addEventListener('mousemove', this.mouseMove);
+            this.canvas.addEventListener('mouseup', this.mouseUp);
+        },
+        draw(){
+            this.ctx.beginPath();
+            this.ctx.arc(this.options.x, this.options.y, this.size, 0, 2 * Math.PI);
+            this.ctx.stroke();
+        },
+        getControlValue(id){
+            var match = this.tools.map(t=> t.controls.filter(c=> c.id === id));
+            var control = match[0][0];
+            return control.value;
+        },
+        mouseDown(e){
+            this.options.x = e.offsetX;
+            this.options.y = e.offsetY;
+            this.options.isDrawing = true;
+        },
+        mouseMove(e){
+            if(this.options.isDrawing){
+                this.draw();
+                this.options.x = e.offsetX;
+                this.options.y = e.offsetY;
+            }
+        },
+        mouseUp(){
+            this.options.isDrawing = false;
+        },
+        setControlValue(id, value){
+            var match = this.tools.map(t=> t.controls.filter(c=> c.id === id));
+            var control = match[0][0];
+            control.value = value;
+        },
+        settingChanged(value, id){
+            this.setControlValue(id, value);
         }
     },
     mounted: function(){
         // add the plugin tools to the tray
         this.$store.commit('SetTools', this.tools);
-
-         
-        this.$root.$on('CanvasReady', (canvas, ctx)=>{
-            this.canvas = canvas;
-            this.ctx = ctx;
-            
-            this.canvas.addEventListener('mousedown', ()=>{
-                this.ctx.beginPath();
-                this.ctx.arc(100, 75, 50, 0, 2 * Math.PI);
-                this.ctx.stroke();
-            })
-        });
+        
+        // get alerted when a toolbar item is used to change a setting
+        this.$root.$on('SettingChanged', this.settingChanged);
+       
+        // set the canvas and context objects when the canvas is ready
+        this.$root.$on('CanvasReady', this.canvasReady);
         
         
         
