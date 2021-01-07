@@ -177,10 +177,6 @@ export default {
         
     },
     props: []
-    
-    
-
-    // props for canvas and context objects
 
     // trigger DrawCompleted event with complete drawing record (a typed object would be nice here)
 

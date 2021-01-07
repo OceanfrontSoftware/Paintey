@@ -26,7 +26,7 @@ export default {
     },
   
     methods: {
-        handleResize: function () {
+        handleResize() {
             // Calculate new canvas size based on window
             var navHeight = document.getElementById('nav-bar').clientHeight;
             var toolbarHeight = document.getElementById('toolbar').clientHeight;
@@ -34,10 +34,17 @@ export default {
             this.width = window.innerWidth - this.margin;
             this.top = navHeight;
         },
+        startNewPainting(){
+            if(!confirm("Are you sure you want to clear the canvas?"))
+                return;
+
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     },
 
     mounted(){
         window.addEventListener('resize', this.handleResize);
+        this.$root.$on("StartNewPainting", this.startNewPainting);
         this.$root.$on('LayoutChanged', this.handleResize);
         this.handleResize();
         this.$nextTick(() => {

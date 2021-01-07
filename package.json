@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "serve -s _static -l tcp://0.0.0.0:${PORT:-8080} -n",
-    "serve": "vue-cli-service serve",
+    "xstart": "serve -s _static -l tcp://0.0.0.0:${PORT:-8080} -n",
+    "start": "node index.js",
+    "serve": "vue-cli-service serve --https ",
     "build": "vue-cli-service build --dest _static",
     "lint": "vue-cli-service lint"
   },
