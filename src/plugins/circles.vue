@@ -7,13 +7,40 @@ export default {
     // store data for the toolbar here
     computed:{
         size(){
-            return this.getControlValue('size-range');
+            var _size = this.getControlValue('size-range');
+            var anchor = this.getControlValue('size-anchor');
+
+            if(anchor.length !== 0)
+            {
+                switch(anchor){
+                    case "top":
+                        return  this.options.y;
+                    case "center":
+                        return Math.abs(this.canvas.height / 2 - this.options.y);
+                    case "bottom":
+                        return this.canvas.height - this.options.y;
+                    case "left":
+                        return this.options.x;
+                    case "middle":
+                        return Math.abs(this.canvas.width / 2 - this.options.x);
+                    case "right":
+                        return this.canvas.width - this.options.x;
+                    default: 
+                        return _size;
+                }    
+            }
+
+            return _size;
+
+
+            
         }
     },
     data() {
         return {
             canvas: null,
             ctx: null,
+            counterSize: 0,
             options: {
                 isDrawing: false,
                 fillStyle : "fill",
@@ -28,6 +55,32 @@ export default {
             },
             tools: [
                 {
+                    name: "Color",
+                    controls: [
+                        {
+                            id: 'color-picker',
+                            component: "colorPicker", 
+                            title: "Color", 
+                            description: "Color",
+                            value: "#000"
+                        }
+                    ]
+                },{
+                    name: "Opacity",
+                    controls: [
+                        {
+                            id: 'opacity',
+                            component: "numberRange", 
+                            title: "Opacity", 
+                            description: "See through",
+                            min: 1,
+                            max: 100,
+                            step: 1,
+                            value: 100
+                        }
+                    ]
+                },
+                {
                     name: "Size",
                     controls: [
                         {
@@ -37,7 +90,21 @@ export default {
                             description: "The size of the circle",
                             min: 1,
                             max: 200,
+                            step: 1,
                             value: 20
+                        }
+                    ]
+                },
+                {
+                    name: "Anchor",
+                    controls: [
+                        {
+                            id: 'size-anchor',
+                            component: 'dropdown',
+                            title: "Anchor",
+                            description: "Anchor size to zero",
+                            value: "",
+                            values: [{name: "", value: ""}, {name: "top", value: "top"}, {name: "center", value: "center"},{name: "bottom", value: "bottom"},{name: "left", value: "left"},{name: "middle", value: "middle"},{name: "right", value: "right"}]
                         }
                     ]
                 }
@@ -50,17 +117,22 @@ export default {
             this.ctx = ctx;
             this.canvas.addEventListener('mousedown', this.mouseDown);
             this.canvas.addEventListener('mousemove', this.mouseMove);
-            this.canvas.addEventListener('mouseup', this.mouseUp);
+            window.addEventListener('mouseup', this.mouseUp);
         },
         draw(){
             this.ctx.beginPath();
+            this.ctx.globalAlpha = this.getControlValue("opacity") / 100;
+            this.ctx.strokeStyle = this.getControlValue('color-picker');
             this.ctx.arc(this.options.x, this.options.y, this.size, 0, 2 * Math.PI);
             this.ctx.stroke();
         },
         getControlValue(id){
-            var match = this.tools.map(t=> t.controls.filter(c=> c.id === id));
-            var control = match[0][0];
-            return control.value;
+            var matches = this.tools.map(t=> t.controls.filter(c=> c.id === id));
+            for(var i = 0; i<matches.length; i++){
+                var control = matches[i][0];
+                if(control && control != [])
+                    return control.value;
+            }
         },
         mouseDown(e){
             this.options.x = e.offsetX;
@@ -69,20 +141,25 @@ export default {
         },
         mouseMove(e){
             if(this.options.isDrawing){
-                this.draw();
                 this.options.x = e.offsetX;
                 this.options.y = e.offsetY;
+                this.draw();
             }
         },
         mouseUp(){
             this.options.isDrawing = false;
+            this.counterSize = 0;
         },
         setControlValue(id, value){
-            var match = this.tools.map(t=> t.controls.filter(c=> c.id === id));
-            var control = match[0][0];
-            control.value = value;
+            var matches = this.tools.map(t=> t.controls.filter(c=> c.id === id));
+            for(var i = 0; i<matches.length; i++){
+                var control = matches[i][0];
+                if(control && control != [])
+                    control.value = value;
+            }
         },
         settingChanged(value, id){
+            console.log(`id: ${id}, value: ${value}`)
             this.setControlValue(id, value);
         }
     },

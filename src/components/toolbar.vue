@@ -14,7 +14,10 @@
 </template>
 
 <script>
+import colorPicker from '../tools/colorPicker.vue'
+import dropdown from '../tools/dropdown.vue'
 import numberRange from '../tools/numberRange.vue'
+
 export default {
   name: 'Toolbar',
   data(){
@@ -23,6 +26,8 @@ export default {
     }
   },
   components: {
+    colorPicker,
+    dropdown,
     numberRange
   },
   updated() {
