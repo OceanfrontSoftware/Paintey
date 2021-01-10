@@ -1,6 +1,6 @@
 <template>
     <div class='tool'>
-        <input ref="range" type="range" :step="componentData.step" :value="componentData.value" :min="componentData.min" :max="componentData.max"/>
+        <b-form-input ref="range" type="range" :step="componentData.step" v-model="componentData.value" :min="componentData.min" :max="componentData.max"></b-form-input>
         <span>{{componentData.value}}</span>
         
     </div>

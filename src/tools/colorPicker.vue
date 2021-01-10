@@ -1,6 +1,6 @@
 <template>
     <div class='tool'>
-        <input ref="control" type="color" :value="componentData.value" />
+        <b-form-input ref="control" type="color" v-model="componentData.value"></b-form-input>
     </div>
 </template>
 

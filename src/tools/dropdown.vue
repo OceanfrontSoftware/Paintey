@@ -1,8 +1,6 @@
 <template>
     <div class='tool'>
-        <select ref="control">
-            <option v-for="item in componentData.values" :key="item.value" :value="item.value">{{item.name}}</option>
-        </select>
+        <b-form-select v-model="componentData.value" :options="componentData.values"></b-form-select>
     </div>
 </template>
 

@@ -104,7 +104,7 @@ export default {
                             title: "Anchor",
                             description: "Anchor size to zero",
                             value: "",
-                            values: [{name: "", value: ""}, {name: "top", value: "top"}, {name: "center", value: "center"},{name: "bottom", value: "bottom"},{name: "left", value: "left"},{name: "middle", value: "middle"},{name: "right", value: "right"}]
+                            values: [{text: "", value: ""}, {text: "top", value: "top"}, {text: "center", value: "center"},{text: "bottom", value: "bottom"},{text: "left", value: "left"},{text: "middle", value: "middle"},{text: "right", value: "right"}]
                         }
                     ]
                 }

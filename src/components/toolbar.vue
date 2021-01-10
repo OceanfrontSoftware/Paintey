@@ -2,7 +2,7 @@
     <div id="toolbar" class="toolbar">
       <h2>{{this.$store.state.test}}</h2>
         <div class="row text-center">
-            <div v-for="tool in this.$store.state.tools" class="setting col-2" :key="tool.name">
+            <div v-for="tool in this.$store.state.tools" class="setting col-1" :key="tool.name">
                 <h3>{{tool.name}}</h3>
                 <div v-for="control in tool.controls" :key="control.title">
                   <component v-bind:componentData="control" v-bind:is="control.component" />
@@ -52,17 +52,7 @@ export default {
     width: 100%;
     padding-top: 5px;
 }
-/* The heart of the matter */
-/*
-.toolbar > .row {
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.toolbar > .row > .setting {
-  display: inline-block;
-}
-*/
-/* Decorations */
+
+
 
 </style>
