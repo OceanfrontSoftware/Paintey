@@ -155,7 +155,7 @@ export default {
                 this.draw();
             }
         },
-        mouseUp(e){
+        mouseUp(){
             this.options.isDrawing = false;
             this.counterSize = 0;
         },
