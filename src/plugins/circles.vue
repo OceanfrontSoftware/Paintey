@@ -115,9 +115,16 @@ export default {
         canvasReady(canvas, ctx){
             this.canvas = canvas;
             this.ctx = ctx;
+
             this.canvas.addEventListener('mousedown', this.mouseDown);
             this.canvas.addEventListener('mousemove', this.mouseMove);
             window.addEventListener('mouseup', this.mouseUp);
+
+            this.canvas.addEventListener('touchstart', this.mouseDown);
+            this.canvas.addEventListener('touchmove', this.mouseMove);
+            window.addEventListener('touchend', this.mouseUp);
+
+
         },
         draw(){
             this.ctx.beginPath();
@@ -135,14 +142,15 @@ export default {
             }
         },
         mouseDown(e){
-            this.options.x = e.offsetX;
-            this.options.y = e.offsetY;
+            console.log('mouse down');
+            this.options.x = e.targetTouches ? e.targetTouches[0].pageX : e.offsetX;
+            this.options.y = e.targetTouches ? e.targetTouches[0].pageY : e.offsetY;
             this.options.isDrawing = true;
         },
         mouseMove(e){
             if(this.options.isDrawing){
-                this.options.x = e.offsetX;
-                this.options.y = e.offsetY;
+                this.options.x = e.targetTouches ? e.targetTouches[0].pageX : e.offsetX;
+                this.options.y = e.targetTouches ? e.targetTouches[0].pageY : e.offsetY;
                 this.draw();
             }
         },

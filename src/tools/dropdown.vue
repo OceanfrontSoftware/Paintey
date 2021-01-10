@@ -7,10 +7,10 @@
 <script>
 export default {
     mounted(){
-        this.$refs.control.addEventListener('change', ()=>{
+        /*this.$refs.control.addEventListener('change', ()=>{
             var value = this.$refs.control.value;
             this.$root.$emit('SettingChanged', value, this.componentData.id);
-        });
+        });*/
     },
     props: ['componentData']
 

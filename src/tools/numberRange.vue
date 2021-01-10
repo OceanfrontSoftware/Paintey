@@ -9,10 +9,10 @@
 <script>
 export default {
     mounted(){
-        this.$refs.range.addEventListener('change', ()=>{
+        /*this.$refs.range.addEventListener('change', ()=>{
             var value = this.$refs.range.value;
             this.$root.$emit('SettingChanged', value, this.componentData.id);
-        });
+        });*/
     },
     props: ['componentData']
 
