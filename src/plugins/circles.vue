@@ -142,19 +142,20 @@ export default {
             }
         },
         mouseDown(e){
-            console.log('mouse down');
+            e.preventDefault();
             this.options.x = e.targetTouches ? e.targetTouches[0].pageX : e.offsetX;
             this.options.y = e.targetTouches ? e.targetTouches[0].pageY : e.offsetY;
             this.options.isDrawing = true;
         },
         mouseMove(e){
+            e.preventDefault();
             if(this.options.isDrawing){
                 this.options.x = e.targetTouches ? e.targetTouches[0].pageX : e.offsetX;
                 this.options.y = e.targetTouches ? e.targetTouches[0].pageY : e.offsetY;
                 this.draw();
             }
         },
-        mouseUp(){
+        mouseUp(e){
             this.options.isDrawing = false;
             this.counterSize = 0;
         },
