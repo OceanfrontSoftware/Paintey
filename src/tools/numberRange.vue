@@ -2,7 +2,6 @@
     <div class='tool'>
         <input ref="range" type="range" :step="componentData.step" :value="componentData.value" :min="componentData.min" :max="componentData.max"/>
         <span>{{componentData.value}}</span>
-        <p>{{componentData.description}}</p>
         
     </div>
 </template>

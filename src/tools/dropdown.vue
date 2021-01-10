@@ -3,7 +3,6 @@
         <select ref="control">
             <option v-for="item in componentData.values" :key="item.value" :value="item.value">{{item.name}}</option>
         </select>
-        <p>{{componentData.description}}</p>
     </div>
 </template>
 

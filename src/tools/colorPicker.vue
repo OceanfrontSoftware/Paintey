@@ -1,8 +1,6 @@
 <template>
     <div class='tool'>
         <input ref="control" type="color" :value="componentData.value" />
-        <p>{{componentData.description}}</p>
-        
     </div>
 </template>
 

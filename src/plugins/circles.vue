@@ -76,7 +76,7 @@ export default {
                             min: 1,
                             max: 100,
                             step: 1,
-                            value: 100
+                            value: 5
                         }
                     ]
                 },
@@ -91,7 +91,7 @@ export default {
                             min: 1,
                             max: 200,
                             step: 1,
-                            value: 20
+                            value: 50
                         }
                     ]
                 },
