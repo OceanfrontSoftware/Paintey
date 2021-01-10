@@ -1,10 +1,20 @@
-var static = require('node-static');
-var http = require('http');
+const express = require('express')
+const app = express()
+const https = require('https')
+const fs = require('fs')
+const port = 3000
 
-var staticFolder = __dirname + "_static";
-console.log(staticFolder);
-var file = new(static.Server)(staticFolder);
+app.use(express.static('_static'));
 
-http.createServer(function (req, res) {
-  file.serve(req, res);
-}).listen(8080)
+app.get('/', (req, res) => {
+    res.send("IT'S WORKING!")
+})
+
+const httpsOptions = {
+    key: fs.readFileSync('./security/cert.key'),
+    cert: fs.readFileSync('./security/cert.pem')
+}
+const server = https.createServer(httpsOptions, app)
+    .listen(port, () => {
+        console.log('server running at ' + port)
+});
