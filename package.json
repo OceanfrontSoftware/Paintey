@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "SET NODE_ENV=prod node index.js",
+    "start": "NODE_ENV=prod node index.js",
     "serve": "vue-cli-service serve --https",
     "build": "vue-cli-service build --dest _static",
     "lint": "vue-cli-service lint"
