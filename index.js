@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const https = require('https')
 const fs = require('fs')
-const port = 3001
+const port = 3000
 const imageRouteHandler = require('./routes/image.js')
 
 
