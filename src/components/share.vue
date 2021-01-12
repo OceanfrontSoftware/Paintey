@@ -14,11 +14,6 @@
         imageUrl: ''
       }
     },
-    data() {
-      return {
-        imageUrl: ''
-      }
-    },
     methods: {
       download(){
 
