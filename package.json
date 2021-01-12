@@ -5,6 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=prod node index.js",
     "serve": "vue-cli-service serve --https",
+    "dev": "SET NODE_ENV=dev & node index.js",
     "build": "vue-cli-service build --dest _static",
     "lint": "vue-cli-service lint"
   },

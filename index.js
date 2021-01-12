@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const https = require('https')
 const fs = require('fs')
-const port = 3000
+const port = 3001
+const imageRouteHandler = require('./routes/image.js')
 
 
 app.use(express.static('_static'));
@@ -10,6 +11,9 @@ app.use(express.static('_static'));
 app.get('/test', (req, res) => {
     res.send("IT'S WORKING!")
 })
+
+app.use('/image', imageRouteHandler)
+
 
 if(process.env.NODE_ENV === "dev"){
     console.log('running dev');
