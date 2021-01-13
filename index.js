@@ -1,9 +1,16 @@
+const bodyParser = require('body-parser');
 const express = require('express')
-const app = express()
 const https = require('https')
+const app = express()
 const fs = require('fs')
 const port = 3000
 const imageRouteHandler = require('./routes/image.js')
+
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '5mb'}));
+
 
 
 app.use(express.static('_static'));

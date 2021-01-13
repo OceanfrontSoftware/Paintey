@@ -1,0 +1,21 @@
+{
+    "databaseUrl": "mongodb://localhost:27017",
+    "s3":
+    {
+        "config":
+        {
+            "endpoint": "sfo2.digitaloceanspaces.com",
+            "accessKeyId": "J6KRJ66M47ISB5ZBA3EW",
+            "secretAccessKey": "Nq1A7uTsxcOE09nDbCU3ItJnbWAaOX+SjSscoxB7eWw"
+        },
+        "bucket":
+        {
+            "name": "paintey-cdn"
+        },
+        "upload":
+        {
+            "wait": 2000,
+            "attempts": 60
+        }
+    }
+}
