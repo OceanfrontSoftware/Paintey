@@ -1,38 +1,47 @@
 <template>
   <div id="app">
-    <Canvas />
-    <Navigation />
-    <Toolbar />
-    <Circles/>
+    <b-navbar id="nav-bar" toggleable="lg" type="dark" variant="info">
+        <router-link to="/">
+            <span class='navbar-brand'>Paintey</span>
+        </router-link>
+        
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <li class="nav-item">
+                    <router-link to="/paint">New</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/about">About</router-link>
+                </li>
+                <b-nav-item >Plugins</b-nav-item>
+                <b-nav-item v-on:click="sharePainting()">Share</b-nav-item>
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
+    <Share></Share>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Canvas from './components/canvas.vue'
-import Circles from './plugins/circles.vue'
-import Navigation from './components/navigation.vue'
-import Toolbar from './components/toolbar.vue'
-
+import Share from './components/share.vue'
 
 export default {
-  name: 'App',
-  components: {
-    Circles,
-    Canvas,
-    Navigation,
-    Toolbar
-  }
+    name: 'App',
+    components: {
+        Share
+    },
+    methods: {
+        newPainting(){
+            this.$root.$emit("StartNewPainting");
+        },
+        sharePainting(){
+            this.$root.$emit('showShareModal')
+        }
+    },
+    mounted(){
+      
+    }
 }
 </script>
-
-<style scoped>
-* {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-}
-</style>
