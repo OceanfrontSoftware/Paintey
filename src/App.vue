@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar id="nav-bar" toggleable="lg" type="dark" variant="info">
-        <router-link to="/">
+        <router-link v-on:click="newPainting()" to="/">
             <span class='navbar-brand'>Paintey</span>
         </router-link>
         
@@ -34,6 +34,7 @@ export default {
     },
     methods: {
         newPainting(){
+            console.log('new painting');
             this.$root.$emit("StartNewPainting");
         },
         sharePainting(){
