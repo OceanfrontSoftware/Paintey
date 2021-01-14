@@ -5,23 +5,28 @@ const app = express()
 const fs = require('fs')
 const port = 3000
 const imageRouteHandler = require('./routes/image.js')
+const pageRouteHandler = require('./routes/page.js')
 
 
-
+// setup application middleware
+app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({limit: '5mb'}));
+app.use(express.static('public'));
 
 
+// routing
+app.use('/image', imageRouteHandler)
+app.use('/', pageRouteHandler)
 
-app.use(express.static('_static'));
 
-app.get('/test', (req, res) => {
-    res.send("IT'S WORKING!")
+// health probe
+app.get('/health-check', function(req, res){ 
+    res.send("OK");
 })
 
-app.use('/image', imageRouteHandler)
 
-
+// dev or prod mode
 if(process.env.NODE_ENV === "dev"){
     console.log('running dev');
     const httpsOptions = {

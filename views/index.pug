@@ -1,0 +1,8 @@
+extends ./layout.pug
+block content
+    .container
+        .row
+            .col-sm-12.col-md-6
+                h1 Home!
+                //each image in images
+                    img(src=`https://paintey-cdn.sfo2.digitaloceanspaces.com/${image._id}.png`)
