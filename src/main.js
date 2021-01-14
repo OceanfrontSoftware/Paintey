@@ -27,7 +27,7 @@ const routes = [
     }
   },
   {
-    path: '/#paint',
+    path: '/paint',
     component: Painting,
     meta: {
       title: 'New Painting - Paintey',
@@ -44,7 +44,7 @@ const routes = [
     }
   },
   {
-    path: '/#about',
+    path: '/about',
     component: About,
     meta: {
       title: 'About Page - Paintey',
