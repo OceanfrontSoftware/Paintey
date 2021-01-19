@@ -21,6 +21,11 @@ app.get('/test', (req, res) => {
 
 app.use('/image', imageRouteHandler)
 
+app.get('/*', function(req,res){
+    var indexPath = __dirname + '/_static/index.html';
+    console.log(indexPath);
+    res.sendFile(indexPath);
+});
 
 if(process.env.NODE_ENV === "dev"){
     console.log('running dev');

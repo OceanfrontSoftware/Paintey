@@ -9,10 +9,10 @@
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <li class="nav-item">
-                    <router-link to="/paint">New</router-link>
+                    <router-link to="/paint" class="nav-link">New</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/about">About</router-link>
+                    <router-link to="/about"  class="nav-link">About</router-link>
                 </li>
                 <b-nav-item >Plugins</b-nav-item>
                 <b-nav-item v-on:click="sharePainting()">Share</b-nav-item>

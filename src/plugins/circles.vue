@@ -116,6 +116,7 @@ export default {
             this.canvas = canvas;
             this.ctx = ctx;
 
+            console.log("ADDING CANVAS EVENT HANDLERS");
             this.canvas.addEventListener('mousedown', this.mouseDown);
             this.canvas.addEventListener('mousemove', this.mouseMove);
             window.addEventListener('mouseup', this.mouseUp);
@@ -131,6 +132,7 @@ export default {
             this.ctx.globalAlpha = this.getControlValue("opacity") / 100;
             this.ctx.strokeStyle = this.getControlValue('color-picker');
             this.ctx.arc(this.options.x, this.options.y, this.size, 0, 2 * Math.PI);
+            //console.log(`drawing x = ${this.options.x}, y=${this.options.y}, size=${this.size}`);
             this.ctx.stroke();
         },
         getControlValue(id){
@@ -173,6 +175,7 @@ export default {
         }
     },
     mounted: function(){
+        console.log('circles mounted')
         // add the plugin tools to the tray
         this.$store.commit('SetTools', this.tools);
         
@@ -180,9 +183,8 @@ export default {
         this.$root.$on('SettingChanged', this.settingChanged);
        
         // set the canvas and context objects when the canvas is ready
+        this.$root.$off('CanvasReady'); // 
         this.$root.$on('CanvasReady', this.canvasReady);
-        
-        
         
     },
     props: []
