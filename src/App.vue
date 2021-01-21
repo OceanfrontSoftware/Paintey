@@ -9,7 +9,7 @@
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <li class="nav-item">
-                    <router-link to="/paint" class="nav-link">New</router-link>
+                    <router-link to="/paint" class="nav-link">Canvas</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/about"  class="nav-link">About</router-link>

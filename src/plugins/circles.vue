@@ -53,33 +53,35 @@ export default {
                 y2: 0,
                 context: null
             },
-            tools: [
+            colors: [
                 {
-                    name: "Color",
+                    name: "Single Color",
                     controls: [
                         {
                             id: 'color-picker',
                             component: "colorPicker", 
-                            title: "Color", 
-                            description: "Color",
-                            value: "#000"
-                        }
-                    ]
-                },{
-                    name: "Opacity",
-                    controls: [
-                        {
-                            id: 'opacity',
-                            component: "numberRange", 
-                            title: "Opacity", 
-                            description: "See through",
-                            min: 1,
-                            max: 100,
-                            step: 1,
-                            value: 5
+                            title: "Single Color", 
+                            description: "Pick a color",
+                            value: "#000",
+                            group: 'colors'
                         }
                     ]
                 },
+                {
+                    name: "Random Color",
+                    controls: [
+                        {
+                            id: 'random-color',
+                            component: "randomColor", 
+                            title: "Random Color", 
+                            description: "Generate random colors",
+                            value: "#000",
+                            group: 'colors'
+                        }
+                    ]
+                }
+            ],
+            tools: [
                 {
                     name: "Size",
                     controls: [
@@ -94,6 +96,20 @@ export default {
                             value: 50
                         }
                     ]
+                },{
+                    name: "Opacity",
+                    controls: [
+                        {
+                            id: 'opacity',
+                            component: "numberRange", 
+                            title: "Transparency", 
+                            description: "How much you can see through the circle",
+                            min: 0.25,
+                            max: 100,
+                            step: 0.25,
+                            value: 5
+                        }
+                    ]
                 },
                 {
                     name: "Anchor",
@@ -102,9 +118,22 @@ export default {
                             id: 'size-anchor',
                             component: 'dropdown',
                             title: "Anchor",
-                            description: "Anchor size to zero",
+                            description: "Grow size as you move away from anchor",
                             value: "",
-                            values: [{text: "", value: ""}, {text: "top", value: "top"}, {text: "center", value: "center"},{text: "bottom", value: "bottom"},{text: "left", value: "left"},{text: "middle", value: "middle"},{text: "right", value: "right"}]
+                            values: [{text: "Not Anchored", value: ""}, {text: "top", value: "top"}, {text: "center", value: "center"},{text: "bottom", value: "bottom"},{text: "left", value: "left"},{text: "middle", value: "middle"},{text: "right", value: "right"}]
+                        }
+                    ]
+                },
+                {
+                    name: "Style",
+                    controls: [
+                        {
+                            id: 'style',
+                            component: 'dropdown',
+                            title: "Style",
+                            description: 'If the circle should be filled in or just the outline',
+                            value: "Stroke",
+                            values: [{text: "Fill", value: "Fill"}, {text: "Stroke", value: "Stroke"}]
                         }
                     ]
                 }
@@ -128,15 +157,16 @@ export default {
 
         },
         draw(){
+            var style = this.getControlValue("style");
             this.ctx.beginPath();
             this.ctx.globalAlpha = this.getControlValue("opacity") / 100;
-            this.ctx.strokeStyle = this.getControlValue('color-picker');
+            this.ctx[style.toLowerCase() + "Style"] = this.getControlValue('color-picker');
             this.ctx.arc(this.options.x, this.options.y, this.size, 0, 2 * Math.PI);
-            //console.log(`drawing x = ${this.options.x}, y=${this.options.y}, size=${this.size}`);
-            this.ctx.stroke();
+            this.ctx[style.toLowerCase()]();
         },
         getControlValue(id){
-            var matches = this.tools.map(t=> t.controls.filter(c=> c.id === id));
+            
+            var matches = this.tools.concat(this.colors).map(t=> t.controls.filter(c=> c.id === id));
             for(var i = 0; i<matches.length; i++){
                 var control = matches[i][0];
                 if(control && control != [])
@@ -178,12 +208,13 @@ export default {
         console.log('circles mounted')
         // add the plugin tools to the tray
         this.$store.commit('SetTools', this.tools);
+        this.$store.commit('SetColors', this.colors);
         
         // get alerted when a toolbar item is used to change a setting
         this.$root.$on('SettingChanged', this.settingChanged);
        
         // set the canvas and context objects when the canvas is ready
-        this.$root.$off('CanvasReady'); // 
+        this.$root.$off('CanvasReady'); // NOTE: add multiple circle drawings at once
         this.$root.$on('CanvasReady', this.canvasReady);
         
     },

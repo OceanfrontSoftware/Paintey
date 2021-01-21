@@ -30,9 +30,9 @@ export default {
         handleResize() {
             // Calculate new canvas size based on window
             var navHeight = document.getElementById('nav-bar').clientHeight;
-            var toolbarHeight = document.getElementById('toolbar').clientHeight;
-            this.height = window.innerHeight - this.margin - navHeight - toolbarHeight;
-            this.width = window.innerWidth - this.margin;
+            var toolbarWidth = document.getElementById('toolbar').clientWidth;
+            this.height = window.innerHeight - this.margin - navHeight;
+            this.width = window.innerWidth - this.margin - toolbarWidth;
             this.top = navHeight;
         },
         startNewPainting(){

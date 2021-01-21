@@ -1,5 +1,6 @@
 <template>
     <div class='tool'>
+        <h5 :title="componentData.description">{{componentData.title}}</h5>
         <b-form-select v-model="componentData.value" :options="componentData.values"></b-form-select>
     </div>
 </template>
