@@ -14,9 +14,9 @@ import '@fortawesome/fontawesome-free/js/all.js'
 const routes = [
   {
     path: '/',
-    component: Home,
+    component: Painting,
     meta: {
-      title: 'Home Page - Paintey',
+      title: 'Paintey - sharable online canvas',
       metaTags: [
         {
           name: 'description',
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: '/paint',
-    component: Painting,
+    component: Home,
     meta: {
       title: 'New Painting - Paintey',
       metaTags: [

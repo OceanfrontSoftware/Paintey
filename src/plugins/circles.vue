@@ -6,6 +6,11 @@
 export default {
     // store data for the toolbar here
     computed:{
+        color(){
+            return this.getSelectedColorControl();
+            
+            
+        },
         size(){
             var _size = this.getControlValue('size-range');
             var anchor = this.getControlValue('size-anchor');
@@ -31,9 +36,6 @@ export default {
             }
 
             return _size;
-
-
-            
         }
     },
     data() {
@@ -63,7 +65,8 @@ export default {
                             title: "Single Color", 
                             description: "Pick a color",
                             value: "#000",
-                            group: 'colors'
+                            group: 'colors',
+                            on: false
                         }
                     ]
                 },
@@ -76,7 +79,8 @@ export default {
                             title: "Random Color", 
                             description: "Generate random colors",
                             value: "#000",
-                            group: 'colors'
+                            group: 'colors',
+                            on: true
                         }
                     ]
                 }
@@ -157,10 +161,20 @@ export default {
 
         },
         draw(){
+            var _color;
+            switch(this.color){
+                case "random-color":
+                    _color ="#" + Math.floor(Math.random()*16777215).toString(16);
+                    break;
+                default:
+                    _color = this.getControlValue('color-picker');
+                    break;
+            }
             var style = this.getControlValue("style");
+
             this.ctx.beginPath();
             this.ctx.globalAlpha = this.getControlValue("opacity") / 100;
-            this.ctx[style.toLowerCase() + "Style"] = this.getControlValue('color-picker');
+            this.ctx[style.toLowerCase() + "Style"] = _color; 
             this.ctx.arc(this.options.x, this.options.y, this.size, 0, 2 * Math.PI);
             this.ctx[style.toLowerCase()]();
         },
@@ -171,6 +185,14 @@ export default {
                 var control = matches[i][0];
                 if(control && control != [])
                     return control.value;
+            }
+        },
+        getSelectedColorControl(){
+            var matches = this.colors.map(t=> t.controls.filter(c=> c.on === true));
+            for(var i = 0; i<matches.length; i++){
+                var control = matches[i][0];
+                if(control && control != [])
+                    return control.id;
             }
         },
         mouseDown(e){

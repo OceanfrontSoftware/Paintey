@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar id="nav-bar" toggleable="lg" type="dark" variant="info">
-        <router-link v-on:click="newPainting()" to="/">
+        <router-link to="/">
             <span class='navbar-brand'>Paintey</span>
         </router-link>
         
@@ -14,32 +14,23 @@
                 <li class="nav-item">
                     <router-link to="/about"  class="nav-link">About</router-link>
                 </li>
-                <b-nav-item >Plugins</b-nav-item>
-                <b-nav-item v-on:click="sharePainting()">Share</b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
-    <Share></Share>
+    
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Share from './components/share.vue'
 
 export default {
     name: 'App',
     components: {
-        Share
+        
     },
     methods: {
-        newPainting(){
-            console.log('new painting');
-            this.$root.$emit("StartNewPainting");
-        },
-        sharePainting(){
-            this.$root.$emit('showShareModal')
-        }
+        
     },
     mounted(){
       

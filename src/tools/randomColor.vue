@@ -1,19 +1,27 @@
 <template>
     <div class='tool'>
-        <h5 :title="componentData.description"><input type="radio" :name="componentData.group" id="randomColor"/>  {{componentData.title}}</h5>
-        <b-form-input ref="control" type="color" v-model="componentData.value"></b-form-input>
+        <h5 :title="componentData.description">
+            <input :name="componentData.group" v-bind:checked="componentData.on" @change="ToggleValue()" type="radio"/>  
+            {{componentData.title}}
+        </h5>
     </div>
 </template>
 
 <script>
 export default {
-    mounted(){
-
+     methods:{
+        ToggleValue(){
+            //this.componentData.on = !this.componentData.on;
+            this.$root.$emit("ColorToolSelected", this.componentData.id)
+        },
+        ToolSelected(id){
+            this.componentData.on = id === this.componentData.id;
+        }
     },
-    props: ['componentData'],
     mounted(){
-        this.componentData.value="#abc";
-    }
+        this.$root.$on('ColorToolSelected', this.ToolSelected);
+    },
+    props: ['componentData']
 
 }
 </script>

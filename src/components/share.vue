@@ -12,6 +12,7 @@
 import axios from 'axios';
 export default 
 {
+    
 
     data() {
         return {
@@ -44,6 +45,7 @@ export default
         }
     },
     mounted(){
+        this.$root.$off('showShareModal');
         this.$root.$on('showShareModal', this.showModal);
     }
 }

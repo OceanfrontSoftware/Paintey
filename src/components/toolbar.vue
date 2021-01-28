@@ -1,26 +1,24 @@
 <template>
     <div id="toolbar" class="toolbar">
       <div class="tool-row">
-        <i title="Start new painting" class="far fa-file iconMd"></i>
-        <i title="Open an existing picture" class="far fa-folder-open iconMd"></i>
-        <i title="Share or download your painting" class="far fa-share-square iconMd"></i>
-        <i title="Help using Paintey" class="far fa-question-circle iconMd"></i>
+        <button v-on:click="newPainting()" id="NewPaintingButton"><i title="Start new painting" class="far fa-file iconMd"></i></button>
+        <button><i title="Open an existing picture" class="far fa-folder-open iconMd"></i></button>
+        <button v-on:click="sharePainting()"><i title="Share or download your painting" class="far fa-share-square iconMd"></i></button>
+        <button><i title="Help using Paintey" class="far fa-question-circle iconMd"></i></button>
       </div>
       <div class="tool-row">
-        <i title="Move" class="far fa-hand-paper iconMd"></i>
-        <i title="Zoom in" class="fas fa-search-plus iconMd"></i>
-        <i title="Zoom out" class="fas fa-search-minus iconMd"></i>
-        <i title="Undo" class="fas fa-undo iconMd"></i>
-        <i title="Redo" class="fas fa-redo iconMd"></i>
+        <button><i title="Move" class="far fa-hand-paper iconMd"></i></button>
+        <button><i title="Zoom in" class="fas fa-search-plus iconMd"></i></button>
+        <button><i title="Zoom out" class="fas fa-search-minus iconMd"></i></button>
+        <button><i title="Undo" class="fas fa-undo iconMd"></i></button>
+        <button><i title="Redo" class="fas fa-redo iconMd"></i></button>
       </div>
       <div class="tool-row">
-        <button v-on:click="panel = 'tools'">
-          <i v-if="this.panel ==='tools'" title="Plugin" class="fas fa-paint-brush iconMd selected"></i>
-          <i v-else title="Plugin" class="fas fa-paint-brush iconMd"></i>
+        <button id='toolButton' v-on:click="panel = 'tools'" :class="panel == 'tools' ? 'selected' : ''">
+          <i title="Plugin" class="fas fa-paint-brush iconMd"></i>
         </button>
-        <button v-on:click="panel = 'colors'">
-          <i v-if="this.panel ==='colors'" title="Colors" class="fas fa-palette iconMd selected"></i>
-          <i v-else title="Colors" class="fas fa-palette iconMd"></i>
+        <button id='colorButton' v-on:click="panel = 'colors'"  :class="panel == 'colors' ? 'selected' : ''">
+          <i title="Colors" class="fas fa-palette iconMd"></i>
         </button>
       </div>
       
@@ -49,6 +47,7 @@
         </div>
       </div>
       
+      <Share></Share>
     </div>
     
 </template>
@@ -58,12 +57,14 @@ import colorPicker from '../tools/colorPicker.vue'
 import randomColor from '../tools/randomColor.vue'
 import dropdown from '../tools/dropdown.vue'
 import numberRange from '../tools/numberRange.vue'
+import Share from '../components/share.vue'
 
 export default {
   name: 'Toolbar',
+  
   data(){
     return {
-      panel: 'colors',
+      panel: 'tools',
       tools: []
     }
   },
@@ -71,16 +72,23 @@ export default {
     colorPicker,
     randomColor,
     dropdown,
-    numberRange
+    numberRange,
+    Share
   },
   methods: {
     
+    newPainting(){
+      this.$root.$emit("StartNewPainting");
+    },
+    sharePainting(){
+      this.$root.$emit('showShareModal')
+    }
   },
   mounted(){
-    
+
   },
   updated() {
-    //this.$root.$emit('LayoutChanged');
+
   }
 }
 </script>
@@ -106,7 +114,6 @@ export default {
 
 .iconMd { 
   font-size: 28px;
-  margin-right: 18px;
   color: #999;
 }
 
@@ -116,7 +123,7 @@ export default {
   border: 1px solid transparent;
 }
 
-.selected {
+.selected, .selected svg {
   color: #333;
 }
 

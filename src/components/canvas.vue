@@ -45,8 +45,13 @@ export default {
 
     mounted(){
         window.addEventListener('resize', this.handleResize);
+        
+        this.$root.$off("StartNewPainting");
         this.$root.$on("StartNewPainting", this.startNewPainting);
+        
+        this.$root.$off('LayoutChanged');
         this.$root.$on('LayoutChanged', this.handleResize);
+        
         this.handleResize();
         this.$nextTick(() => {
             this.$root.$emit('CanvasReady', this.canvas, this.ctx);
