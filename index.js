@@ -9,7 +9,7 @@ const imageRouteHandler = require('./routes/image.js')
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.json({limit: '20mb'}));
 
 
 
