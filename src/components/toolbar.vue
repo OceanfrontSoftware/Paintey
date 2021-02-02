@@ -2,11 +2,11 @@
     <div id="toolbar" class="toolbar">
       <div class="tool-row">
         <button v-on:click="newPainting()" id="NewPaintingButton"><i title="Start new painting" class="far fa-file iconMd"></i></button>
-        <button><i title="Open an existing picture" class="far fa-folder-open iconMd"></i></button>
+        <button style="display:none;"><i title="Open an existing picture" class="far fa-folder-open iconMd"></i></button>
         <button v-on:click="sharePainting()"><i title="Share or download your painting" class="far fa-share-square iconMd"></i></button>
-        <button><i title="Help using Paintey" class="far fa-question-circle iconMd"></i></button>
+        <button style="display:none;"><i title="Help using Paintey" class="far fa-question-circle iconMd"></i></button>
       </div>
-      <div class="tool-row">
+      <div class="tool-row" style="display:none;">
         <button><i title="Move" class="far fa-hand-paper iconMd"></i></button>
         <button><i title="Zoom in" class="fas fa-search-plus iconMd"></i></button>
         <button><i title="Zoom out" class="fas fa-search-minus iconMd"></i></button>
@@ -46,10 +46,8 @@
           </div>
         </div>
       </div>
-      
       <Share></Share>
     </div>
-    
 </template>
 
 <script>

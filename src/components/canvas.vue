@@ -54,6 +54,12 @@ export default {
         
         this.handleResize();
         this.$nextTick(() => {
+            // color background white
+            this.ctx.beginPath();
+            this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = "#fff";
+            this.ctx.fill();
+
             this.$root.$emit('CanvasReady', this.canvas, this.ctx);
         })
     }

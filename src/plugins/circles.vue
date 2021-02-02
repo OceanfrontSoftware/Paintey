@@ -87,6 +87,19 @@ export default {
             ],
             tools: [
                 {
+                    name: "Style",
+                    controls: [
+                        {
+                            id: 'style',
+                            component: 'dropdown',
+                            title: "Style",
+                            description: 'If the circle should be filled in or just the outline',
+                            value: "Fill",
+                            values: [{text: "Fill", value: "Fill"}, {text: "Outline", value: "Stroke"}]
+                        }
+                    ]
+                },
+                {
                     name: "Size",
                     controls: [
                         {
@@ -100,20 +113,6 @@ export default {
                             value: 50
                         }
                     ]
-                },{
-                    name: "Opacity",
-                    controls: [
-                        {
-                            id: 'opacity',
-                            component: "numberRange", 
-                            title: "Transparency", 
-                            description: "How much you can see through the circle",
-                            min: 0.25,
-                            max: 100,
-                            step: 0.25,
-                            value: 5
-                        }
-                    ]
                 },
                 {
                     name: "Anchor",
@@ -121,26 +120,29 @@ export default {
                         {
                             id: 'size-anchor',
                             component: 'dropdown',
-                            title: "Anchor",
-                            description: "Grow size as you move away from anchor",
+                            title: "Stick To",
+                            description: "Make the circle stick to a line and grow in size from there",
                             value: "",
-                            values: [{text: "Not Anchored", value: ""}, {text: "top", value: "top"}, {text: "center", value: "center"},{text: "bottom", value: "bottom"},{text: "left", value: "left"},{text: "middle", value: "middle"},{text: "right", value: "right"}]
+                            values: [{text: "Not Stuck", value: ""}, {text: "top", value: "top"}, {text: "center", value: "center"},{text: "bottom", value: "bottom"},{text: "left", value: "left"},{text: "middle", value: "middle"},{text: "right", value: "right"}]
                         }
                     ]
                 },
                 {
-                    name: "Style",
+                    name: "Opacity",
                     controls: [
                         {
-                            id: 'style',
-                            component: 'dropdown',
-                            title: "Style",
-                            description: 'If the circle should be filled in or just the outline',
-                            value: "Stroke",
-                            values: [{text: "Fill", value: "Fill"}, {text: "Stroke", value: "Stroke"}]
+                            id: 'opacity',
+                            component: "numberRange", 
+                            title: "Fade", 
+                            description: "How much to fade the circle",
+                            min: 0.25,
+                            max: 100,
+                            step: 0.25,
+                            value: 50
                         }
                     ]
                 }
+                
             ]
         }
     },

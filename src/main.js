@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import App from './App.vue'
-import Home from './Home.vue'
+import Feed from './Feed.vue'
+import FeedItem from './FeedItem.vue'
 import Painting from './Painting.vue'
 import About from './About.vue'
 import store from "./store";
@@ -29,11 +30,29 @@ const routes = [
       ]
     }
   },
+  
   {
-    path: '/paint',
-    component: Home,
+    path: '/about',
+    component: About,
     meta: {
-      title: 'New Painting - Paintey',
+      title: 'About Us - Paintey',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'About Paintey'
+        },
+        {
+          property: 'og:description',
+          content: 'About Paintey'
+        }
+      ]
+    }
+  },
+  {
+    path: '/paintings',
+    component: Feed,
+    meta: {
+      title: 'Paintings - Paintey',
       metaTags: [
         {
           name: 'description',
@@ -51,19 +70,36 @@ const routes = [
     }
   },
   {
-    path: '/about',
-    component: About,
+    path: '/paintings/:id',
+    component: FeedItem,
     meta: {
-      title: 'About Page - Paintey',
+      title: 'Painting - Paintey',
       metaTags: [
         {
           name: 'description',
-          content: 'About Paintey'
+          content: 'Make a new painting online with Paintey'
+        },
+        {
+          property: 'og:url',
+          content: 'https://paintey.com/paintings/:id'
+        },
+        {
+          property: 'og:type',
+          content: 'website'
+        },
+        {
+          property: 'og:title',
+          content: 'My painting on Paintey'
         },
         {
           property: 'og:description',
-          content: 'About Paintey'
+          content: 'Paint and share online with Paintey!'
+        },
+        {
+          property: 'og:image',
+          content: 'https://image.paintey.com/:id.thumb.jpg'
         }
+        
       ]
     }
   }
@@ -85,6 +121,10 @@ const router = new VueRouter({
 // This callback runs before every route change, including on page load.
 
 router.beforeEach((to, from, next) => {
+  /*console.log(`to: `);
+  for(var p in to){
+    console.log(`to.${p}: ${to[p]}`);
+  }*/
   // This goes through the matched routes from last to first, finding the closest route with a title.
   // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
   const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
@@ -106,8 +146,23 @@ router.beforeEach((to, from, next) => {
   nearestWithMeta.meta.metaTags.map(tagDef => {
     const tag = document.createElement('meta');
 
+    // set the meta tag key / value - substitute :id in the value if present
     Object.keys(tagDef).forEach(key => {
-      tag.setAttribute(key, tagDef[key]);
+      var value = tagDef[key];
+      if(value.indexOf(":id") > -1)
+      {
+        var pathParts = to.path.split('/');
+        if(pathParts.length > 1){
+          var id = pathParts[pathParts.length - 1];
+          if(!id || id==null || id.length == 0)
+            id = "";
+          
+          console.log(`id: ${id}`);
+          value = value.replace(":id", id);
+        }
+        
+      }
+      tag.setAttribute(key, value);
     });
 
     // We use this to track which meta tags we create, so we don't interfere with other ones.

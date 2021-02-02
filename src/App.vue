@@ -9,31 +9,40 @@
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <li class="nav-item">
-                    <router-link to="/paint" class="nav-link">Canvas</router-link>
+                    <router-link to="/paintings" class="nav-link">Paintings</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/about"  class="nav-link">About</router-link>
+                    <router-link to="/about" class="nav-link">About</router-link>
                 </li>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
-    
     <router-view></router-view>
   </div>
+  
 </template>
 
 <script>
 
+
 export default {
     name: 'App',
     components: {
-        
+      
     },
     methods: {
-        
+
     },
     mounted(){
       
     }
 }
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTM0HCRQTD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZTM0HCRQTD');
 </script>

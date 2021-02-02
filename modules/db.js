@@ -29,48 +29,66 @@ delete: function(collectionName, id){
 
 // get a record from a collection by id
 getById: function(collectionName, id){
-    var id = req.params.id;
-    var collectionName = req.params.collectionName;
+
     console.log(`/mongo/${collectionName}/${id}`);
-    getClient()
-    .then(function(db){
-        var collection = db.collection(collectionName);
-        collection.findOne({"_id": new ObjectId(id)}, {}, function(err, item) {
-   
-            db.close();
-            db = null;
 
-            if(err)
-                throw err;
-            return item;
+    return new Promise(function(fulfill, reject){
+        getClient()
+        .then(function(client){
+            client.connect(function(err){
+                if(err)
+                    reject(err);
+
+                var db = client.db(dbName);
+                var collection = db.collection(collectionName);
+                collection.findOne({"_id": new ObjectId(id)}, {}, function(err, item) {
+    
+                    client.close();
+                    client = null;
+    
+                    if(err)
+                        reject(err);
+                    
+                    fulfill(item);
+                });
+            });         
+        })
+        .catch(function(err){
+            console.log('catch err: ' + err.message)
+            reject(err);
         });
-    })
-    .catch(function(err){
-        throw err;
     });
-
 },
 
 // get a record from a collection by using a filter
 search: function(collectionName, params){
-   
-    getClient()
-    .then(function(db){
-        var collection = db.collection(collectionName);
-        collection.find(params.query, params.projection).sort(params.sort).limit(params.limit).skip(params.skip).toArray(function(err, items) {
-            
-            db.close();
-            db = null;
+    return new Promise(function(fulfill, reject){
+        getClient()
+        .then(function(client){
+            client.connect(function(err){
+                if(err)
+                    reject(err);
 
-            if(err)
-                throw err;
-            return items;
+                var db = client.db(dbName);
+                var collection = db.collection(collectionName);
+                params = getSearchParams(params);
+                collection.find(params.query, params.projection).sort(params.sort).limit(params.limit).skip(params.skip).toArray(function(err, items) {
+    
+                    client.close();
+                    client = null;
+    
+                    if(err)
+                        reject(err);
+                    
+                    fulfill(items);
+                });
+            });         
+        })
+        .catch(function(err){
+            console.log('catch err: ' + err.message)
+            reject(err);
         });
-    })
-    .catch(function(err){
-        throw err;
     });
-
 },
   
 // creates a new object in the named collection and returns it
@@ -165,7 +183,7 @@ update: function(collectionName, id, props){
 }
 
 
-function getSearchParams(req){
+function getSearchParams(_params){
     
     /*
     requests must come in as application/json
@@ -184,15 +202,15 @@ function getSearchParams(req){
 
     var params = {
         // query specifies the search conditions
-        query: req.body.query  || {},
+        query: _params.query  || {},
         // projection specifies what fields to return
-        projection: req.body.projection || {},
+        projection: _params.projection || {},
         // limit the number of results: limit: 5 - return only 5 results
-        limit: req.body.limit || 1000,
+        limit: _params.limit || 1000,
         // skip the n number of records: skip: 10 - skips the first 10 results
-        skip: req.body.skip || 0,
+        skip: _params.skip || 0,
         // sort the results by the key: { age : -1, posts: 1 } - sort by age descending, then by posts ascending
-        sort: req.body.sort || {_id: -1}
+        sort: _params.sort || {_id: -1}
     }
 
     if(typeof(params.query) === 'string'){
