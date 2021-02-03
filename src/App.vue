@@ -18,6 +18,7 @@
         </b-collapse>
     </b-navbar>
     <router-view></router-view>
+    
   </div>
   
 </template>
@@ -34,15 +35,16 @@ export default {
 
     },
     mounted(){
-      
+        let ga = document.createElement('script');
+        ga.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=G-ZTM0HCRQTD');
+        document.body.appendChild(ga);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZTM0HCRQTD');
+    
     }
 }
 </script>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTM0HCRQTD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ZTM0HCRQTD');
-</script>

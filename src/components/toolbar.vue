@@ -1,6 +1,7 @@
 <template>
     <div id="toolbar" class="toolbar">
       <div class="tool-row">
+        <button id="toolbarToggle" v-on:click="toggleToolbar()"><i id="toolbarToggleIcon" class="fas fa-arrow-right"></i></button>
         <button v-on:click="newPainting()" id="NewPaintingButton"><i title="Start new painting" class="far fa-file iconMd"></i></button>
         <button style="display:none;"><i title="Open an existing picture" class="far fa-folder-open iconMd"></i></button>
         <button v-on:click="sharePainting()"><i title="Share or download your painting" class="far fa-share-square iconMd"></i></button>
@@ -46,7 +47,6 @@
           </div>
         </div>
       </div>
-      <Share></Share>
     </div>
 </template>
 
@@ -55,23 +55,25 @@ import colorPicker from '../tools/colorPicker.vue'
 import randomColor from '../tools/randomColor.vue'
 import dropdown from '../tools/dropdown.vue'
 import numberRange from '../tools/numberRange.vue'
-import Share from '../components/share.vue'
+import axios from 'axios';
 
 export default {
   name: 'Toolbar',
   
   data(){
     return {
+      imageId: '',
+      imageUrl: '',
       panel: 'tools',
-      tools: []
+      tools: [],
+      collapsed: true
     }
   },
   components: {
     colorPicker,
     randomColor,
     dropdown,
-    numberRange,
-    Share
+    numberRange
   },
   methods: {
     
@@ -79,7 +81,42 @@ export default {
       this.$root.$emit("StartNewPainting");
     },
     sharePainting(){
-      this.$root.$emit('showShareModal')
+      var _component = this;
+      var c = document.getElementById('image-canvas');
+      var src = "";
+      if(c)
+          src = c.toDataURL();
+      this.imageUrl = src;
+
+      // save image and get URL
+      axios.post("/image/", {img: this.imageUrl})
+      .then(function(response){
+          var id = response.data.id;
+          console.log(`id: ${id}`);
+          _component.imageId = id;
+          window.open('/paintings/' + id);
+          //TODO: open the /paintings/:id in new tab - need to share from that page
+          //ALSO: need to update paintings once saved instead of creating new id    
+      })
+      .catch(function(err){
+          console.log('axios error posting to /images: ' + err.message);
+      })
+    },
+    toggleToolbar(){
+      var toolbar = document.getElementById('toolbar');
+      var toolbarToggleIcon = document.getElementById("toolbarToggleIcon");
+      if(this.collapsed){
+        toolbar.style.right = "0px";
+        this.collapsed = false;
+        toolbarToggleIcon.classList.remove('fa-arrow-left');
+        toolbarToggleIcon.classList.add('fa-arrow-right');
+        
+      } else {
+        toolbar.style.right = "-260px";
+        this.collapsed = true;
+        toolbarToggleIcon.classList.add('fa-arrow-left');
+        toolbarToggleIcon.classList.remove('fa-arrow-right');
+      }
     }
   },
   mounted(){
@@ -93,14 +130,23 @@ export default {
 
 <style scoped>
 
+#toolbarToggle {
+  position: relative;
+  margin-left: -36px;
+  top: -14px;
+  margin-right: 5px;
+}
+
 #toolbar {
+    background-color:#fff;
     position: fixed;
+    right: 0px;
     width: 260px;
-    right: 0;
     height: 100%;
     border: 1px solid #555;
     border-width: 0 0 0 2px;
 }
+
 
 .tool-row {
   padding: 5px;

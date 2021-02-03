@@ -26,40 +26,67 @@ router.get('/:id', function (req, res) {
 
 
 router.post('/', function (req, res) {
-    // upload to spaces
-    var id = "";
     var img = req.body.img;
-    img =img.replace(/^data:image\/png;base64,/, "");
-
-    // insert db record with url
-    db.insert(collection, {ts: new Date()})
-    .then(function(obj){
-        id = obj._id;
-        let buff = Buffer.from(img, 'base64');
-        return sharp(buff)
-        .resize(1000)
-        .jpeg({quality:90})
-        .toBuffer();
+    
+    img = img.replace(/^data:image\/png;base64,/, "");
+    var buff = Buffer.from(img, 'base64');
+    getId(req)
+    .then(function(id){
+        console.log('got id: ' + id);
+        return UploadImage(id, buff)
     })
-    .then(function(buff){
-        return s3.uploadFile(buff, id + ".jpg");
-    })
-    .then(function(ret){
-        let buff = Buffer.from(img, 'base64');
-        return sharp(buff)
-        .resize(300)
-        .jpeg({quality:90})
-        .toBuffer();
-    })
-    .then(function(buff){
-        return s3.uploadFile(buff, id + ".thumb.jpg");
-    })
-    .then(function(ret){
+    .then(function(id){
         res.send({id: id});
     })
     .catch(function(err){
         console.log('post image failed: ' + err);
     })
 })
+
+function getId(req){
+    return new Promise(function(fulfill, reject){
+        // if id was sent in request then already exists
+        var id = req.body.id;
+        if(id)
+            fulfill(id);
+    
+        // create new id record in database
+        db.insert(collection, {ts: new Date()})
+        .then(function(obj){
+            id = obj._id;
+            fulfill(id);
+        })
+    });
+}
+
+
+function UploadImage(id, buff){
+    return new Promise(function(fulfill, reject){
+        console.log('uploading image: ' + id);
+
+        sharp(buff)
+        .resize({width: 1000, height: 1000, fit: "inside"})
+        .jpeg({quality:90})
+        .toBuffer()
+        .then(function(buff){
+            console.log('uploading image: scaled the large image');
+            return s3.uploadFile(buff, id + ".jpg");
+        })
+        .then(function(ret){
+            console.log('uploading image: uploaded large image');
+            return sharp(buff)
+            .resize({width: 300, height: 300, fit: "inside"})
+            .jpeg({quality:90})
+            .toBuffer();
+        })
+        .then(function(buff){
+            console.log('uploading image: scaled the thumbnail');
+            return s3.uploadFile(buff, id + ".thumb.jpg");
+        })
+        .then(function(){
+            fulfill(id);
+        })
+    })
+}
 
 module.exports = router;
