@@ -16,6 +16,7 @@ router.get('/:id', function (req, res) {
         var metaTags = meta.replaceAll("#id#", id);
         var body = template.replaceAll("#id#", id);
         
+        html = html.replace('Vue App', 'Paintey - Paint and share online!')
         html = html.replace('<div id="app"></div>', body);
         html = html.replace('<head>', '<head>' + metaTags);
         res.send(html);
@@ -26,11 +27,11 @@ router.get('/:id', function (req, res) {
 
 const meta = `
 <meta name='description' content='Make a new painting online with Paintey'>
-<meta name='og:url' content='https://paintey.com/painting/#id#'>
-<meta name='og:type' content='website'>
-<meta name='og:title' content='My painting on Paintey'>
-<meta name='og:description' content='Paint and share online with Paintey!'>
-<meta name='og:image' content='https://image.paintey.com/#id#.thumb.jpg'>`;
+<meta property='og:url' content='https://paintey.com/painting/#id#'>
+<meta property='og:type' content='website'>
+<meta property='og:title' content='My painting on Paintey'>
+<meta property='og:description' content='Paint and share online with Paintey!'>
+<meta property='og:image' content='https://image.paintey.com/#id#.jpg'>`;
 
 const template = `
 <div id="fb-root"></div>
