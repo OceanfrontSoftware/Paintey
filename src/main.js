@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import App from './App.vue'
 import Feed from './Feed.vue'
-import FeedItem from './FeedItem.vue'
+//import FeedItem from './FeedItem.vue'
 import Painting from './Painting.vue'
 import About from './About.vue'
 import store from "./store";
@@ -49,7 +49,7 @@ const routes = [
     }
   },
   {
-    path: '/paintings',
+    path: '/share',
     component: Feed,
     meta: {
       title: 'Paintings - Paintey',
@@ -68,7 +68,7 @@ const routes = [
         }
       ]
     }
-  },
+  }/*,
   {
     path: '/paintings/:id',
     component: FeedItem,
@@ -102,7 +102,7 @@ const routes = [
         
       ]
     }
-  }
+  }*/
 ];
 
 // Make BootstrapVue available throughout your project

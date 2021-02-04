@@ -2,14 +2,18 @@
     <b-container>
         <b-row>
             <b-col>
-                <h1>Feed</h1>
+                <h1>Recently Shared Paintings</h1>
+                <p>
+                    <i title="Share or download your painting" class="far fa-share-square iconMd"></i> 
+                    Use the share button to show your paintings here! 
+                </p>
                 <b-container fluid>
                     <b-row>
                         <b-col cols="3" v-for="painting in this.paintings" :key="painting._id">
-                            <router-link :to='"/paintings/" + painting._id'>
+                            <a :href='"/painting/" + painting._id'>
                                 <b-img-lazy thumbnail fluid :src="'https://image.paintey.com/' + painting._id + '.thumb.jpg'" />
                                 <p>{{formatDateTime(painting.ts)}}</p>
-                            </router-link>
+                            </a>
                         </b-col>
                     </b-row>
                 </b-container>

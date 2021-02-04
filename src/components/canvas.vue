@@ -29,7 +29,7 @@ export default {
     methods: {
         handleResize() {
             // Calculate new canvas size based on window
-            var navHeight = document.getElementById('nav-bar').clientHeight;
+            var navHeight = document.getElementById('nav').clientHeight;
             //var toolbarWidth = document.getElementById('toolbar').clientWidth;
             this.height = window.innerHeight - this.margin - navHeight;
             this.width = window.innerWidth - this.margin;

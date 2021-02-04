@@ -2,6 +2,7 @@
     <div id="toolbar" class="toolbar">
       <div class="tool-row">
         <button id="toolbarToggle" v-on:click="toggleToolbar()"><i id="toolbarToggleIcon" class="fas fa-arrow-right"></i></button>
+
         <button v-on:click="newPainting()" id="NewPaintingButton"><i title="Start new painting" class="far fa-file iconMd"></i></button>
         <button style="display:none;"><i title="Open an existing picture" class="far fa-folder-open iconMd"></i></button>
         <button v-on:click="sharePainting()"><i title="Share or download your painting" class="far fa-share-square iconMd"></i></button>
@@ -66,7 +67,7 @@ export default {
       imageUrl: '',
       panel: 'tools',
       tools: [],
-      collapsed: true
+      collapsed: false
     }
   },
   components: {
@@ -133,7 +134,6 @@ export default {
 #toolbarToggle {
   position: relative;
   margin-left: -36px;
-  top: -14px;
   margin-right: 5px;
 }
 
@@ -145,6 +145,11 @@ export default {
     height: 100%;
     border: 1px solid #555;
     border-width: 0 0 0 2px;
+}
+
+#toolbar button{
+  border: 1px solid #333;
+  margin-right: 4px;
 }
 
 

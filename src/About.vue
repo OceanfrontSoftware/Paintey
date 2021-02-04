@@ -2,12 +2,12 @@
     <b-container>
         <b-row>
             <b-col>
-                <h1>About</h1>
+                <h1>Paintey</h1>
                 <p>
-                    Paintey is a fun way to draw online. We hope you enjoy, and be sure to share your paintings!
+                    Paintey is a fun way to make unique paintings online. We hope you enjoy - and be sure to share your paintings!
                 </p>
                 <p>
-                    I'll post more here soon, just trying to get this project online. 
+                    We'll post more here soon, we just got this thing running in February 2021. 
                 </p>
                 <p>
                     Thanks for visiting!

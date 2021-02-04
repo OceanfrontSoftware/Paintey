@@ -1,22 +1,10 @@
 <template>
   <div id="app">
-    <b-navbar id="nav-bar" toggleable="lg" type="dark" variant="info">
-        <router-link to="/">
-            <span class='navbar-brand'>Paintey</span>
-        </router-link>
-        
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav>
-                <li class="nav-item">
-                    <router-link to="/paintings" class="nav-link">Paintings</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link to="/about" class="nav-link">About</router-link>
-                </li>
-            </b-navbar-nav>
-        </b-collapse>
-    </b-navbar>
+    <div id="nav">
+        <h4><a href="/">Paint</a></h4>
+        <h4><router-link to="/share">Share</router-link></h4>
+        <h4><router-link to="/about">About</router-link></h4>
+    </div>
     <router-view></router-view>
     
   </div>
@@ -48,3 +36,18 @@ export default {
 }
 </script>
 
+<style scoped>
+    #nav {
+        background-color:tomato;
+        padding: 10px;
+    }
+    #nav h4 {
+        display: inline; 
+        margin-right: 10px;
+        font-size: 1.4em;
+    }
+    #nav a{
+        color: #fff;
+        
+    }
+</style>

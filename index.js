@@ -5,6 +5,7 @@ const app = express()
 const fs = require('fs')
 const port = 3000
 const imageRouteHandler = require('./routes/image.js')
+const viewRouteHandler = require('./routes/views.js')
 
 
 
@@ -20,6 +21,7 @@ app.get('/test', (req, res) => {
 })
 
 app.use('/image', imageRouteHandler)
+app.use('/painting', viewRouteHandler)
 
 app.get('/*', function(req,res){
     var indexPath = __dirname + '/_static/index.html';
