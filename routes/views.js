@@ -43,8 +43,8 @@ const template = `
       <div class="col">
          <img src="https://image.paintey.com/#id#.jpg" class="img-thumbnail img-fluid">
          <a download="paintey.png" href="https://image.paintey.com/#id#.jpg" target="_self" class="btn btn-secondary">Download</a>
-         <button data-href="https://paintey.com/share/#id#" data-layout="button" data-size="small" type="button" class="btn fb-share-button btn-secondary"> 
-            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpaintey.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore share-button" style="color:#fff;">Share on Facebook</a>
+         <button data-href="https://paintey.com/paintings/#id#" data-layout="button" data-size="small" type="button" class="btn fb-share-button btn-secondary"> 
+            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpaintey.com%2Fpainting%2F#id#&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore share-button" style="color:#fff;">Share on Facebook</a>
         </button>
       </div>
    </div>

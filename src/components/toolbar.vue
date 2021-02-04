@@ -95,8 +95,8 @@ export default {
           var id = response.data.id;
           console.log(`id: ${id}`);
           _component.imageId = id;
-          window.open('/paintings/' + id);
-          //TODO: open the /paintings/:id in new tab - need to share from that page
+          window.open('/painting/' + id);
+          //TODO: open the /painting/:id in new tab - need to share from that page
           //ALSO: need to update paintings once saved instead of creating new id    
       })
       .catch(function(err){

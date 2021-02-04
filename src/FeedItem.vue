@@ -5,12 +5,13 @@
                 <b-img-lazy thumbnail fluid :src="'https://image.paintey.com/' + painting._id + '.jpg'" />
                 <p>{{formatDateTime(painting.ts)}}</p>
                 <b-button :href="this.imageUrl" download='paintey.png'>Download</b-button>
-                <b-button class="fb-share-button" :data-href="'https://paintey.com/paintings/' + this.imageId" data-layout="button" data-size="small">
+                <b-button class="fb-share-button" :data-href="'https://paintey.com/painting/' + this.imageId" data-layout="button" data-size="small">
                     <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpaintey.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore share-button">Share on Facebook</a>
                 </b-button>
             </b-col>
         </b-row>
-        <!-- Load Facebook SDK for JavaScript -->
+        <!-- For now this page is not in use, am pre-rendering on server, but will likely use SSR in future so this page will come back -->        
+        <!-- for now see /routes/views -->
         
         <div id="fb-root"></div>
     </b-container>
