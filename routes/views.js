@@ -26,7 +26,7 @@ router.get('/:id', function (req, res) {
 
 const meta = `
 <meta name='description' content='Make a new painting online with Paintey'>
-<meta name='og:url' content='https://paintey.com/paintings/#id#'>
+<meta name='og:url' content='https://paintey.com/painting/#id#'>
 <meta name='og:type' content='website'>
 <meta name='og:title' content='My painting on Paintey'>
 <meta name='og:description' content='Paint and share online with Paintey!'>
